@@ -1,4 +1,5 @@
-import { useRef, useMemo, useEffect, useReducer, useCallback } from 'react';
+import { useRef, useMemo, useContext, useReducer, useCallback } from 'react';
+import { FormContext } from './consts';
 import { formReducer } from './store/reducer';
 import {
 	setFieldTouchedAction,
@@ -12,23 +13,19 @@ import {
 	setFieldError,
 	removeFieldError
 } from './store/actionCreators';
-import {
-	throwError,
-	isFunction,
-	isEmptyValue,
-	isNullOrUndefined,
-	validateField,
-	validateAllFields,
-} from './utilities';
+import { throwError, validateField,	validateAllFields } from './utilities';
+import { useEventCallback } from '../../hooks/useEventCallback';
+import { isEmptyValue } from '../../utilities/string';
+import { isFunction, isNullOrUndefined, } from '../../utilities/type';
 
-export const usePrevious = (value) => {
-	const ref = useRef();
+export const useFormAPI = () => {
+	const context = useContext(FormContext);
 
-	useEffect(() => {
-		ref.current = value;
-	}, [value]);
+	if (context === undefined) {
+		throw new Error('useFormAPI must be used within a FormProvider');
+	}
 
-	return ref.current;
+	return context
 };
 
 export const useForm = (
@@ -53,19 +50,25 @@ export const useForm = (
 
 	const values = useMemo(() => state.values, [state.values]);
 
-	const getFieldValue = useCallback((name) => {
-		if (!isNullOrUndefined(values[name])) {
-			return values[name];
-		}
+	const errors = useMemo(() => state.errors, [state.errors]);
 
-		throwError(`Field wit name ${name} is not defined`);
+	const getValues = useCallback(() => {
+		return values;
 	}, [values]);
+
+	const getFieldValue = useCallback((name) => {
+		return isNullOrUndefined(values[name]) ? '' : values[name];
+	}, [values]);
+
+	const getErrors = useCallback(() => {
+		return errors;
+	}, [errors]);
 
 	// const isValuesChanged = useMemo(() => {}, []); TODO comparison if values were changed.
 
 	const hasErrors = useMemo(() => {
-		return Object.values(state.errors).some((errorMessage) => !isEmptyValue(errorMessage));
-	}, [state.errors]);
+		return Object.values(errors).some((errorMessage) => !isEmptyValue(errorMessage));
+	}, [errors]);
 
 	const allowSubmit = useMemo(() => {
 		return formConfig.allowSubmitWithError || !hasErrors;
@@ -75,8 +78,8 @@ export const useForm = (
 	]);
 
 	const hasErrorMessage = useCallback((name) => {
-		return !isEmptyValue(state.errors[name]) ? state.errors[name] : null;
-	}, [state.errors]);
+		return !isEmptyValue(errors[name]) ? errors[name] : null;
+	}, [errors]);
 
 	const isTouched = useCallback((name) => {
 		return state.touched[name];
@@ -92,7 +95,7 @@ export const useForm = (
 		}
 	}, [hasErrorMessage]);
 
-	const handleBlur = useCallback((event) => {
+	const handleBlur = useEventCallback((event) => {
 		event.persist();
 		const { name } = event.target;
 
@@ -102,25 +105,20 @@ export const useForm = (
 
 		if (formConfig.validateOnBlur) {
 			validateField(fieldValidation.current, values, name)
-			.then((result) => {
-				toggleError(result.errorMessage, result.fieldName);
-			});
+				.then((result) => {
+					toggleError(result.errorMessage, result.fieldName);
+				});
 		}
-	}, [
-		values,
-		isTouched,
-		toggleError,
-		validateField
-	]);
+	});
 
-	const handleChange = useCallback((event) => {
+	const handleChange = useEventCallback((event) => {
 		event.persist();
 		const { name, value } = event.target;
 
 		setFieldValueAction(name, value, dispatch);
-	}, []);
+	});
 
-	const handleSubmit = useCallback(async (event) => {
+	const handleSubmit = useEventCallback(async (event) => {
 		event.preventDefault();
 
 		if (!allowSubmit) return;
@@ -141,10 +139,7 @@ export const useForm = (
 			submitFailureAction(dispatch);
 			setErrors(errorMessages, dispatch)
 		}
-	}, [
-		values,
-		allowSubmit
-	]);
+	});
 
 	const registerField = useCallback((name) => {
 		registerFieldAction(name, dispatch);
@@ -166,49 +161,13 @@ export const useForm = (
 		delete fieldValidation.current[name];
 	}, []);
 
-	const getFieldProps = useCallback((name, props) => {
-		const { onBlur, onChange } = props;
-		return {
-			name,
-			value: getFieldValue(name),
-			onBlur: (event) => {
-				handleBlur(event);
-
-				if (!isNullOrUndefined(onBlur)) {
-					if (isFunction(onBlur)) {
-						onBlur(event);
-					} else {
-						throwError('Passed prop onBlur is not a function');
-					}
-				}
-			},
-			onChange: (event) => {
-				handleChange(event);
-
-				if (!isNullOrUndefined(onChange)) {
-					if (isFunction(onChange)) {
-						onChange(event);
-					} else {
-						throwError('Passed prop onChange is not a function');
-					}
-				}
-			}
-		}
-	}, [
-		values,
-		handleBlur,
-		handleChange,
-		getFieldValue
-	]);
-
-	console.log(state);
-
 	return {
-		state,
+		getValues,
+		getErrors,
 		handleBlur,
 		handleChange,
 		handleSubmit,
-		getFieldProps,
+		getFieldValue,
 		registerField,
 		unregisterField,
 		registerFieldValidation,

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useFormAction } from './Form'
+import { useFormAPI } from './hooks';
 
 const Field = (
 	{
@@ -8,12 +8,14 @@ const Field = (
 	}
 ) => {
 	const {
-		getFieldProps,
+		handleBlur,
+		handleChange,
+		getFieldValue,
 		registerField,
 		unregisterField,
 		registerFieldValidation,
 		unregisterFieldValidation
-	} = useFormAction();
+	} = useFormAPI();
 
 	useEffect(() => {
 		registerField(props.name);
@@ -40,10 +42,16 @@ const Field = (
 		unregisterFieldValidation
 	]);
 
-	return React.createElement(component, {
-		...props,
-		...getFieldProps(props.name, props)
-	});
+	const value = getFieldValue(props.name);
+
+	return React.useMemo(() => {
+		return React.createElement(component, {
+			...props,
+			value,
+			onBlur: handleBlur,
+			onChange: handleChange
+		});
+	}, [value]);
 };
 
 export { Field };

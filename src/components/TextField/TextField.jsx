@@ -8,7 +8,11 @@ const TextField = (
 		onBlur,
 		onChange,
 		required,
-		placeholder
+		placeholder,
+
+		ariaLabel,
+		ariaLabelledBy,
+		ariaDescribedBy
 	}
 ) => {
 	const handleBlur = event => {
@@ -27,12 +31,23 @@ const TextField = (
 			name={name}
 			type={type}
 			value={value}
+			placeholder={required ? `${placeholder}*` : placeholder }
+
+			required={required}
+			aria-required={required}
+			aria-label={ariaLabel} // if other description absent
+			aria-labelledby={ariaLabelledBy} // which element has label for input
+			aria-describedby={ariaDescribedBy} // which element describe input
+
 			onBlur={handleBlur}
 			onChange={handleChange}
-			placeholder={required ? `${placeholder}*` : placeholder }
 			autoComplete="off"
 		/>
 	)
 };
 
-export default TextField;
+TextField.defaultValue = {
+	type: 'text'
+};
+
+export { TextField };

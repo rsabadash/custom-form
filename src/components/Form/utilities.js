@@ -1,15 +1,5 @@
-export const isNull = (value) => value === null;
-
-export const isUndefined = (value) => typeof value === 'undefined';
-
-export const isNullOrUndefined = (value) => isNull(value) || isUndefined(value);
-
-export const isEmptyValue = (value) => isNullOrUndefined(value) || String(value).trim() === '';
-
-export const isFunction = value => typeof value === 'function';
-
 export const validateField = (rules, values, fieldName) => {
-	if (rules[fieldName].validate) {
+	if (rules[fieldName] && rules[fieldName].validate) {
 		const fieldValue = values[fieldName];
 
 		for (const validation of rules[fieldName].validate) {

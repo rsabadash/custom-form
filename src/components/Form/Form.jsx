@@ -1,28 +1,6 @@
-import React, { useMemo, createContext } from 'react';
+import React, { useMemo } from 'react';
 import { useForm } from './hooks';
-
-const FormStateContext = createContext();
-const FormActionContext = createContext();
-
-export const useFormState = () => {
-	const context = React.useContext(FormStateContext);
-
-	if (context === undefined) {
-		throw new Error('useFormState must be used within a FormProvider');
-	}
-
-	return context
-};
-
-export const useFormAction = () => {
-	const context = React.useContext(FormActionContext);
-
-	if (context === undefined) {
-		throw new Error('useFormState must be used within a FormProvider');
-	}
-
-	return context
-};
+import { FormContext } from './consts';
 
 const Form = (
 	{
@@ -41,11 +19,12 @@ const Form = (
 	}, []);
 
 	const {
-		state,
+		getValues,
+		getErrors,
 		handleBlur,
 		handleChange,
 		handleSubmit,
-		getFieldProps,
+		getFieldValue,
 		registerField,
 		unregisterField,
 		registerFieldValidation,
@@ -56,24 +35,38 @@ const Form = (
 		initialValues
 	});
 
+	const memoValues = useMemo(() => {
+		return {
+			getValues,
+			getErrors,
+			handleBlur,
+			handleChange,
+			handleSubmit,
+			getFieldValue,
+			registerField,
+			unregisterField,
+			registerFieldValidation,
+			unregisterFieldValidation
+		};
+	}, [
+		getValues,
+		getErrors,
+		handleBlur,
+		handleChange,
+		handleSubmit,
+		getFieldValue,
+		registerField,
+		unregisterField,
+		registerFieldValidation,
+		unregisterFieldValidation
+	]);
+
 	return (
-		<FormStateContext.Provider value={{
-			state
-		}}>
-			<FormActionContext.Provider value={{
-				handleBlur,
-				handleChange,
-				getFieldProps,
-				registerField,
-				unregisterField,
-				registerFieldValidation,
-				unregisterFieldValidation
-			}}>
-				<form onSubmit={handleSubmit}>
-					{children}
-				</form>
-			</FormActionContext.Provider>
-		</FormStateContext.Provider>
+		<FormContext.Provider value={memoValues}>
+			<form onSubmit={handleSubmit}>
+				{children}
+			</form>
+		</FormContext.Provider>
 	);
 };
 
