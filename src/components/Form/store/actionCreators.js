@@ -50,14 +50,14 @@ export const submitFailureAction = (dispatch) => {
 	});
 };
 
-export const setErrors = (errors, dispatch) => {
+export const setErrorsAction = (errors, dispatch) => {
 	dispatch({
 		type: actions.SET_ERRORS,
 		payload: errors
 	});
 };
 
-export const setFieldError = (fieldName, error, dispatch) => {
+export const setFieldErrorAction = (fieldName, error, dispatch) => {
 	dispatch({
 		type: actions.SET_FIELD_ERROR,
 		payload: {
@@ -66,9 +66,18 @@ export const setFieldError = (fieldName, error, dispatch) => {
 	});
 };
 
-export const removeFieldError = (fieldName, dispatch) => {
+export const removeFieldErrorAction = (fieldName, dispatch) => {
 	dispatch({
 		type: actions.REMOVE_FIELD_ERROR,
 		payload: fieldName
+	});
+};
+
+export const resetFormAction = (initialValues, dispatch) => {
+	dispatch({
+		type: actions.RESET_FORM,
+		payload: {
+			initialValues
+		}
 	});
 };

@@ -1,5 +1,5 @@
 import { useRef, useMemo, useContext, useReducer, useCallback } from 'react';
-import { FormContext } from './consts';
+import {FormActionsContext, FormStateContext} from './consts';
 import { formReducer } from './store/reducer';
 import {
 	setFieldTouchedAction,
@@ -9,20 +9,31 @@ import {
 	submitAttemptAction,
 	submitSuccessAction,
 	submitFailureAction,
-	setErrors,
-	setFieldError,
-	removeFieldError
+	setErrorsAction,
+	setFieldErrorAction,
+	removeFieldErrorAction,
+	resetFormAction
 } from './store/actionCreators';
 import { throwError, validateField,	validateAllFields } from './utilities';
 import { useEventCallback } from '../../hooks/useEventCallback';
 import { isEmptyValue } from '../../utilities/string';
 import { isFunction, isNullOrUndefined, } from '../../utilities/type';
 
-export const useFormAPI = () => {
-	const context = useContext(FormContext);
+export const useFormState = () => {
+	const context = useContext(FormStateContext);
+	
+	if (context === undefined) {
+		throw new Error('useFormState must be used within a FormStateProvider');
+	}
+	
+	return context
+};
+
+export const useFormActions = () => {
+	const context = useContext(FormActionsContext);
 
 	if (context === undefined) {
-		throw new Error('useFormAPI must be used within a FormProvider');
+		throw new Error('useFormActions must be used within a FormActionsProvider');
 	}
 
 	return context
@@ -47,7 +58,9 @@ export const useForm = (
 	});
 
 	const fieldValidation = useRef({});
-
+	
+	const initialFormValues = useRef(initialValues);
+	
 	const values = useMemo(() => state.values, [state.values]);
 
 	const errors = useMemo(() => state.errors, [state.errors]);
@@ -87,14 +100,33 @@ export const useForm = (
 
 	const toggleError = useCallback((error, name) => {
 		if (!isEmptyValue(error) && error !== hasErrorMessage(name)) {
-			return setFieldError(name, error, dispatch);
+			return setFieldErrorAction(name, error, dispatch);
 		}
 
 		if (isEmptyValue(error) && hasErrorMessage(name)) {
-			removeFieldError(name, dispatch);
+			removeFieldErrorAction(name, dispatch);
 		}
 	}, [hasErrorMessage]);
 
+	const submitForm = useEventCallback(async () => {
+		submitAttemptAction(dispatch);
+		
+		const errorMessages = await validateAllFields(fieldValidation.current, values);
+		
+		if (!Object.keys(errorMessages).length) {
+			try {
+				await onSubmit(values);
+				submitSuccessAction(dispatch);
+			} catch (error) {
+				submitFailureAction(dispatch);
+				setErrorsAction(error, dispatch)
+			}
+		} else {
+			submitFailureAction(dispatch);
+			setErrorsAction(errorMessages, dispatch)
+		}
+	});
+	
 	const handleBlur = useEventCallback((event) => {
 		event.persist();
 		const { name } = event.target;
@@ -118,26 +150,11 @@ export const useForm = (
 		setFieldValueAction(name, value, dispatch);
 	});
 
-	const handleSubmit = useEventCallback(async (event) => {
+	const handleSubmit = useEventCallback((event) => {
 		event.preventDefault();
 
-		if (!allowSubmit) return;
-
-		submitAttemptAction(dispatch);
-
-		const errorMessages = await validateAllFields(fieldValidation.current, values);
-
-		if (!Object.keys(errorMessages).length) {
-			try {
-				await onSubmit(values);
-				submitSuccessAction(dispatch);
-			} catch (error) {
-				submitFailureAction(dispatch);
-				setErrors(error, dispatch)
-			}
-		} else {
-			submitFailureAction(dispatch);
-			setErrors(errorMessages, dispatch)
+		if (allowSubmit) {
+			submitForm();
 		}
 	});
 
@@ -161,9 +178,14 @@ export const useForm = (
 		delete fieldValidation.current[name];
 	}, []);
 
+	const resetForm = useCallback(() => {
+		resetFormAction(initialFormValues.current, dispatch);
+	}, []);
+	
 	return {
 		getValues,
 		getErrors,
+		resetForm,
 		handleBlur,
 		handleChange,
 		handleSubmit,
@@ -172,5 +194,5 @@ export const useForm = (
 		unregisterField,
 		registerFieldValidation,
 		unregisterFieldValidation
-	}
+	};
 };

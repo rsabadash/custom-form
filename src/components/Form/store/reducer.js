@@ -78,6 +78,16 @@ export const formReducer = (state, action) => {
 					[action.payload]: ''
 				}
 			};
+		case action.RESET_FORM:
+			return {
+				...state,
+				values: {
+					...action.payload.initialValues
+				},
+				errors: {},
+				touched: {},
+				isSubmitting: false
+			};
 		default:
 			return state;
 	}

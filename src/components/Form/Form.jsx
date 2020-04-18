@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useForm } from './hooks';
-import { FormContext } from './consts';
+import { FormActionsContext, FormStateContext } from './consts';
 
 const Form = (
 	{
@@ -21,6 +21,7 @@ const Form = (
 	const {
 		getValues,
 		getErrors,
+		resetForm,
 		handleBlur,
 		handleChange,
 		handleSubmit,
@@ -35,26 +36,34 @@ const Form = (
 		initialValues
 	});
 
-	const memoValues = useMemo(() => {
+	const memoStateValues = useMemo(() => {
 		return {
 			getValues,
 			getErrors,
+			getFieldValue
+		};
+	}, [
+		getValues,
+		getErrors,
+		getFieldValue
+	]);
+	
+	const memoActionValues = useMemo(() => {
+		return {
+			resetForm,
 			handleBlur,
 			handleChange,
 			handleSubmit,
-			getFieldValue,
 			registerField,
 			unregisterField,
 			registerFieldValidation,
 			unregisterFieldValidation
 		};
 	}, [
-		getValues,
-		getErrors,
+		resetForm,
 		handleBlur,
 		handleChange,
 		handleSubmit,
-		getFieldValue,
 		registerField,
 		unregisterField,
 		registerFieldValidation,
@@ -62,11 +71,13 @@ const Form = (
 	]);
 
 	return (
-		<FormContext.Provider value={memoValues}>
-			<form onSubmit={handleSubmit}>
-				{children}
-			</form>
-		</FormContext.Provider>
+		<FormStateContext.Provider value={memoStateValues}>
+			<FormActionsContext.Provider value={memoActionValues}>
+				<form onSubmit={handleSubmit}>
+					{children}
+				</form>
+			</FormActionsContext.Provider>
+		</FormStateContext.Provider>
 	);
 };
 

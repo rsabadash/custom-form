@@ -6,7 +6,7 @@ import { required, minLength } from './utilities/formValidators';
 
 const TestForm = () => {
 	const testHandleChange = () => {
-		console.log('testHandleChange')
+		console.log('testHandleChange');
 	};
 
 	return (
@@ -30,11 +30,6 @@ const TestForm = () => {
 				component={Input}
 				validate={[required(), minLength({ minLength: 6 })]}
 			/>
-			<div style={{
-				width: '500px',
-				height: '500px',
-				backgroundColor: 'red'
-			}}>2</div>
 			<input type="submit" value="Submit" />
 		</Form>
 	);

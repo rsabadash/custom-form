@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import Label from '../Label';
 import { TextField } from '../TextField';
 import { isEmptyValue } from '../../utilities/string';
-// import { Field } from "../Form";
 
 const Input = (
 	{
@@ -29,7 +28,7 @@ const Input = (
 	}, [
 		customLabelId,
 		labelledBy
-	])
+	]);
 
 	return (
 		<>

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useFormAPI } from './hooks';
+import { useFormActions, useFormState } from './hooks';
 
 const Field = (
 	{
@@ -10,13 +10,16 @@ const Field = (
 	const {
 		handleBlur,
 		handleChange,
-		getFieldValue,
 		registerField,
 		unregisterField,
 		registerFieldValidation,
 		unregisterFieldValidation
-	} = useFormAPI();
+	} = useFormActions();
 
+	const {
+		getFieldValue
+	} = useFormState();
+	
 	useEffect(() => {
 		registerField(props.name);
 
