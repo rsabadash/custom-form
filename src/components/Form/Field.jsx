@@ -8,16 +8,16 @@ const Field = (
 	}
 ) => {
 	const {
-		handleBlur,
-		handleChange,
 		registerField,
 		unregisterField,
+		getFieldHandlers,
 		registerFieldValidation,
 		unregisterFieldValidation
 	} = useFormActions();
 
 	const {
-		getFieldValue
+		getFieldValue,
+		getFieldError
 	} = useFormState();
 	
 	useEffect(() => {
@@ -46,15 +46,18 @@ const Field = (
 	]);
 
 	const value = getFieldValue(props.name);
+	const error = getFieldError(props.name);
 
 	return React.useMemo(() => {
 		return React.createElement(component, {
 			...props,
-			value,
-			onBlur: handleBlur,
-			onChange: handleChange
+			...getFieldHandlers(props),
+			fieldData: {
+				value,
+				error
+			}
 		});
-	}, [value]);
+	}, [value, error]);
 };
 
 export { Field };

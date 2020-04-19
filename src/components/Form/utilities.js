@@ -1,3 +1,5 @@
+import { isEmptyValue } from '../../utilities/string';
+
 export const validateField = (rules, values, fieldName) => {
 	if (rules[fieldName] && rules[fieldName].validate) {
 		const fieldValue = values[fieldName];

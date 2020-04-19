@@ -76,6 +76,10 @@ export const useForm = (
 	const getErrors = useCallback(() => {
 		return errors;
 	}, [errors]);
+	
+	const getFieldError = useCallback((name) => {
+		return isNullOrUndefined(errors[name]) ? '' : errors[name];
+	}, [errors]);
 
 	// const isValuesChanged = useMemo(() => {}, []); TODO comparison if values were changed.
 
@@ -182,6 +186,38 @@ export const useForm = (
 		resetFormAction(initialFormValues.current, dispatch);
 	}, []);
 	
+	const getFieldHandlers = useCallback((props) => {
+		const { onBlur, onChange } = props;
+
+		return {
+			onBlur: (event) => {
+				handleBlur(event);
+				
+				if (!isNullOrUndefined(onBlur)) {
+					if (isFunction(onBlur)) {
+						onBlur(event);
+					} else {
+						throwError('Passed prop onBlur is not a function');
+					}
+				}
+			},
+			onChange: (event) => {
+				handleChange(event);
+				
+				if (!isNullOrUndefined(onChange)) {
+					if (isFunction(onChange)) {
+						onChange(event);
+					} else {
+						throwError('Passed prop onChange is not a function');
+					}
+				}
+			}
+		}
+	}, [
+		handleBlur,
+		handleChange
+	]);
+	
 	return {
 		getValues,
 		getErrors,
@@ -190,8 +226,10 @@ export const useForm = (
 		handleChange,
 		handleSubmit,
 		getFieldValue,
+		getFieldError,
 		registerField,
 		unregisterField,
+		getFieldHandlers,
 		registerFieldValidation,
 		unregisterFieldValidation
 	};

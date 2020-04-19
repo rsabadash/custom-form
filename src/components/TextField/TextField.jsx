@@ -7,10 +7,10 @@ const TextField = (
 		value,
 		onBlur,
 		onChange,
+		disabled,
 		required,
-		placeholder,
-
 		ariaLabel,
+		placeholder,
 		ariaLabelledBy,
 		ariaDescribedBy
 	}
@@ -31,22 +31,20 @@ const TextField = (
 			name={name}
 			type={type}
 			value={value}
-			placeholder={required ? `${placeholder}*` : placeholder }
-
+			disabled={disabled}
 			required={required}
-			aria-required={required}
-			aria-label={ariaLabel} // if other description absent
-			aria-labelledby={ariaLabelledBy} // which element has label for input
-			aria-describedby={ariaDescribedBy} // which element describe input
-
 			onBlur={handleBlur}
 			onChange={handleChange}
+			aria-label={ariaLabel} // if other description absent
+			placeholder={placeholder}
+			aria-labelledby={ariaLabelledBy} // which element has label for input
+			aria-describedby={ariaDescribedBy} // which element describe input
 			autoComplete="off"
 		/>
 	)
 };
 
-TextField.defaultValue = {
+TextField.defaultProps = {
 	type: 'text'
 };
 

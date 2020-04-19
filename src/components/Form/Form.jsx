@@ -26,8 +26,10 @@ const Form = (
 		handleChange,
 		handleSubmit,
 		getFieldValue,
+		getFieldError,
 		registerField,
 		unregisterField,
+		getFieldHandlers,
 		registerFieldValidation,
 		unregisterFieldValidation
 	} = useForm({
@@ -40,12 +42,14 @@ const Form = (
 		return {
 			getValues,
 			getErrors,
-			getFieldValue
+			getFieldValue,
+			getFieldError
 		};
 	}, [
 		getValues,
 		getErrors,
-		getFieldValue
+		getFieldValue,
+		getFieldError
 	]);
 	
 	const memoActionValues = useMemo(() => {
@@ -56,6 +60,7 @@ const Form = (
 			handleSubmit,
 			registerField,
 			unregisterField,
+			getFieldHandlers,
 			registerFieldValidation,
 			unregisterFieldValidation
 		};
@@ -66,6 +71,7 @@ const Form = (
 		handleSubmit,
 		registerField,
 		unregisterField,
+		getFieldHandlers,
 		registerFieldValidation,
 		unregisterFieldValidation
 	]);

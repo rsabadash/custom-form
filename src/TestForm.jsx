@@ -1,7 +1,8 @@
 import React from 'react';
 
-import Form, { Field } from './components/Form';
+import { Field } from './components/Form';
 import { Input } from './components/AccessibleFormField';
+import { AccessibleForm } from './components/AccessibleForm';
 import { required, minLength } from './utilities/formValidators';
 
 const TestForm = () => {
@@ -10,14 +11,16 @@ const TestForm = () => {
 	};
 
 	return (
-		<Form onSubmit={console.log} initialValues={{ firstName: 'John' }}>
-			<h1>Test form</h1>
+		<AccessibleForm
+			onSubmit={console.log}
+			formTitle="Test form"
+			ariaLabelledBy="testForm"
+			initialValues={{ firstName: 'John' }}
+		>
 			<Field
 				required
 				name="firstName"
 				label="First name"
-				labelId="firstNameLabel"
-				placeholder="First name"
 				onChange={testHandleChange}
 				component={Input}
 				validate={[required(), minLength({ minLength: 2 })]}
@@ -31,7 +34,7 @@ const TestForm = () => {
 				validate={[required(), minLength({ minLength: 6 })]}
 			/>
 			<input type="submit" value="Submit" />
-		</Form>
+		</AccessibleForm>
 	);
 };
 
