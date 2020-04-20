@@ -6,7 +6,8 @@ const Dropdown = (
 		items,
 		multiSelect,
 		onChange,
-		name
+		name,
+		ariaLabeledBy
 	}
 ) => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -16,28 +17,75 @@ const Dropdown = (
 		setIsOpen(!isOpen);
 	};
 	
-	const handleOnClick = (event, item) => {
-		if (!selection.some((current) => current.id === item.id)) {
-			if (!multiSelect) {
-				setSelection([item]);
-			} else if (multiSelect) {
-				setSelection([...selection, item]);
+	const checkIsItemSelected = (id) => {
+		return !!selection.find((current) => current.id === id);
+	};
+	
+	const uncheckSelectedValue = (id) => {
+		return selection.filter((current) => current.id !== id);
+	};
+	
+	const getMultipleValue = () => {
+		return selection.reduce((acc, item, index) => {
+			if (index === 0) {
+				acc = `${item.value}`;
+			} else {
+				acc = `${acc} | ${item.value}`;
 			}
 			
-			onChange && onChange(event, item.id);
-		} else {
-			const selectionAfterRemoval = selection.filter((current) => current.id !== item.id);
+			return acc;
+		}, '');
+	};
+	
+	const getSingleValue = () => {
+		return (selection[0] && selection[0].value) || '';
+	};
+	
+	const getFormattedValue = () => {
+		return multiSelect ? getMultipleValue() : getSingleValue();
+	};
+	
+	const getMultipleId = () => {
+		return selection.reduce((acc, item) => {
+			acc.push(item.id);
+
+			return acc;
+		}, []);
+	};
+	
+	const getSingleId = () => {
+		return (selection[0] && selection[0].id) || '';
+	};
+	
+	const getFormattedId = () => {
+		return multiSelect ? getMultipleId() : getSingleId();
+	};
+	
+	const handleOnClick = (event, item) => {
+		const isItemAlreadySelected = checkIsItemSelected(item.id);
+		
+		if (!isItemAlreadySelected) {
+			if (multiSelect) {
+				setSelection([...selection, item]);
+			} else {
+				setSelection([item]);
+			}
+		}
+		
+		if (isItemAlreadySelected && multiSelect) {
+			const selectionAfterRemoval = uncheckSelectedValue(item.id);
 			setSelection([...selectionAfterRemoval]);
 		}
 		
+		const value = getFormattedId();
+		
+		onChange && onChange(event, value);
+
 		setIsOpen(false);
 	};
 	
-	const isItemSelected = (item) => {
-		return !!selection.find((current) => current.id === item.id);
-	};
-	
-	const formattedValue = selection[0] && selection[0].id || '';
+	const formattedInputValue = getFormattedId();
+	const formattedDropdownValue = getFormattedValue();
 	
 	return (
 		<>
@@ -45,11 +93,14 @@ const Dropdown = (
 				<div
 					role="button"
 					tabIndex={0}
+					aria-haspopup="listbox"
+					aria-labelledby={ariaLabeledBy}
+					aria-expanded={isOpen}
 					onClick={toggle}
 					onKeyPress={toggle}
 				>
 					<div>
-						<p>{(selection[0] && selection[0].value) || title}</p>
+						<p>{formattedDropdownValue || title}</p>
 					</div>
 					<div>
 						{
@@ -59,22 +110,31 @@ const Dropdown = (
 				</div>
 				{
 					isOpen && (
-						<ul>
+						<ul
+							role="listbox"
+							tabIndex={-1}
+							aria-multiselectable={multiSelect}
+							aria-labelledby={ariaLabeledBy}
+							// aria-activedescendant - when element is active
+						>
 							{
 								items.map((item) => {
+									const { id, value } = item;
+									const isItemSelected = checkIsItemSelected(id);
 									return (
 										<li
-											key={item.id}
+											aria-selected={isItemSelected}
+											role="option"
+											id={id}
+											key={id}
 										>
 											<button
 												type="button"
 												onClick={(event) => handleOnClick(event, item)}
 											>
-												<span>{item.value}</span>
+												<span>{value}</span>
 												{
-													isItemSelected(item) && (
-														<span>Selected</span>
-													)
+													isItemSelected && <span>Selected</span>
 												}
 											</button>
 										</li>
@@ -85,7 +145,7 @@ const Dropdown = (
 					)
 				}
 			</div>
-			<input type="hidden" value={formattedValue} name={name} />
+			<input type="hidden" value={formattedInputValue} name={name} />
 		</>
 	);
 };
