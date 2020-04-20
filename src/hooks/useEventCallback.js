@@ -1,13 +1,13 @@
 import { useRef, useCallback, useLayoutEffect } from 'react';
 
 const useEventCallback = (fn) => {
-	let ref = useRef(() => {});
-
+	const ref = useRef(fn);
+	
 	useLayoutEffect(() => {
 		ref.current = fn;
 	});
-
-	return useCallback((event) => ref.current(event), []);
+	
+	return useCallback((...args) => ref.current.apply(0, args), []);
 };
 
 export { useEventCallback };

@@ -3,6 +3,7 @@ import React from 'react';
 import { Field } from './components/Form';
 import { Input } from './components/AccessibleFormField';
 import { AccessibleForm } from './components/AccessibleForm';
+import { Dropdown } from './components/DropDown';
 import { required, minLength } from './utilities/formValidators';
 
 const TestForm = () => {
@@ -10,6 +11,21 @@ const TestForm = () => {
 		console.log('testHandleChange');
 	};
 
+	const items = [
+		{
+			id: 1,
+			value: 'Pulp Fiction'
+		},
+		{
+			id: 2,
+			value: 'The Prestige'
+		},
+		{
+			id: 4,
+			value: 'Blade Runner 2049'
+		}
+	];
+	
 	return (
 		<AccessibleForm
 			onSubmit={console.log}
@@ -32,6 +48,12 @@ const TestForm = () => {
 				onChange={testHandleChange}
 				component={Input}
 				validate={[required(), minLength({ minLength: 6 })]}
+			/>
+			<Field
+				title="Test dropdown"
+				items={items}
+				name="dropdown"
+				component={Dropdown}
 			/>
 			<input type="submit" value="Submit" />
 		</AccessibleForm>

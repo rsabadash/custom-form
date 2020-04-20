@@ -131,29 +131,37 @@ export const useForm = (
 		}
 	});
 	
-	const handleBlur = useEventCallback((event) => {
-		event.persist();
-		const { name } = event.target;
-
+	const executeBlur = useCallback((event, name) => {
 		if (!isTouched(name)) {
 			setFieldTouchedAction(name, true, dispatch)
 		}
-
+		
 		if (formConfig.validateOnBlur) {
 			validateField(fieldValidation.current, values, name)
 				.then((result) => {
 					toggleError(result.errorMessage, result.fieldName);
 				});
 		}
+	}, []);
+	
+	const handleBlur = useEventCallback((name) => {
+		return (event) => executeBlur(event, name);
 	});
-
-	const handleChange = useEventCallback((event) => {
-		event.persist();
-		const { name, value } = event.target;
-
-		setFieldValueAction(name, value, dispatch);
+	
+	const executeChange = useCallback((event, name, value) => {
+		let fieldValue = value;
+		
+		if (event.target) {
+			fieldValue = event.target.value || value;
+		}
+		
+		setFieldValueAction(name, fieldValue, dispatch);
+	}, []);
+	
+	const handleChange = useEventCallback((name) => {
+		return (event, value) => executeChange(event, name, value);
 	});
-
+	
 	const handleSubmit = useEventCallback((event) => {
 		event.preventDefault();
 
@@ -187,11 +195,16 @@ export const useForm = (
 	}, []);
 	
 	const getFieldHandlers = useCallback((props) => {
-		const { onBlur, onChange } = props;
-
+		const { onBlur, onChange, name } = props;
+		
+		const handleFieldBlur = handleBlur(name);
+		const handleFieldChange = handleChange(name);
+		
 		return {
 			onBlur: (event) => {
-				handleBlur(event);
+				if (event.persist) event.persist();
+
+				handleFieldBlur(event);
 				
 				if (!isNullOrUndefined(onBlur)) {
 					if (isFunction(onBlur)) {
@@ -201,12 +214,14 @@ export const useForm = (
 					}
 				}
 			},
-			onChange: (event) => {
-				handleChange(event);
+			onChange: (event, value) => {
+				if (event.persist) event.persist();
+
+				handleFieldChange(event, value);
 				
 				if (!isNullOrUndefined(onChange)) {
 					if (isFunction(onChange)) {
-						onChange(event);
+						onChange(event, value);
 					} else {
 						throwError('Passed prop onChange is not a function');
 					}
