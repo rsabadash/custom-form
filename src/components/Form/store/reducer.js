@@ -1,7 +1,7 @@
 import { actions} from './consts';
 
 export const formReducer = (state, action) => {
-	console.log(action.type);
+	// console.log(action.type);
 	switch (action.type) {
 		case actions.SET_FIELD_VALUE:
 			return {

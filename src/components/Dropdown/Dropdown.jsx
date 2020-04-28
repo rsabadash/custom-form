@@ -1,19 +1,46 @@
-import React, { useState } from 'react';
-
+import React, { useRef, useMemo, useState, useEffect } from 'react';
+import classNames from 'classnames';
+import { isEmptyValue } from '../../utilities/string';
+import classes from './styles/dropdown.scss';
+// ADD POSSIBILITY FOR INITIAL STATE
 const Dropdown = (
 	{
-		title,
+		name,
 		items,
+		placeholder,
 		multiSelect,
 		onChange,
-		name,
-		ariaLabeledBy
+		onBlur,
+		ariaLabel,
+		ariaDescribedBy,
+		ariaLabelledBy,
+		dropdownId
 	}
 ) => {
+	const listRef = useRef(null);
+	const buttonRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [selection, setSelection] = useState([]);
+	const [focusedIndex, setFocusedIndex] = useState(-1);
+	const [focusedItemId, setFocusedItemId] = useState(null);
 	
-	const toggle = () => {
+	useEffect(() => {
+		if (isOpen) {
+			if (listRef.current) {
+				listRef.current.focus();
+			}
+		}
+		
+		return () => {
+			if (isOpen) {
+				buttonRef.current.focus();
+			}
+		};
+	}, [isOpen]);
+	
+	const uniqueDropdownId = useMemo(() => isEmptyValue(dropdownId) ? Date.now() : dropdownId, []);
+	
+	const toggleDropdownList = () => {
 		setIsOpen(!isOpen);
 	};
 	
@@ -25,8 +52,8 @@ const Dropdown = (
 		return selection.filter((current) => current.id !== id);
 	};
 	
-	const getMultipleValue = () => {
-		return selection.reduce((acc, item, index) => {
+	const getMultipleValue = (selectedItems = selection) => {
+		return selectedItems.reduce((acc, item, index) => {
 			if (index === 0) {
 				acc = `${item.value}`;
 			} else {
@@ -37,106 +64,216 @@ const Dropdown = (
 		}, '');
 	};
 	
-	const getSingleValue = () => {
-		return (selection[0] && selection[0].value) || '';
+	const getSingleValue = (selectedItems = selection) => {
+		return (selectedItems[0] && selectedItems[0].value) || '';
 	};
 	
-	const getFormattedValue = () => {
-		return multiSelect ? getMultipleValue() : getSingleValue();
+	const getFormattedValue = (selectedItems) => {
+		return multiSelect ? getMultipleValue(selectedItems) : getSingleValue(selectedItems);
 	};
 	
-	const getMultipleId = () => {
-		return selection.reduce((acc, item) => {
+	const getMultipleId = (selectedItems = selection) => {
+		return selectedItems.reduce((acc, item) => {
 			acc.push(item.id);
 
 			return acc;
 		}, []);
 	};
 	
-	const getSingleId = () => {
-		return (selection[0] && selection[0].id) || '';
+	const getSingleId = (selectedItems = selection) => {
+		return (selectedItems[0] && selectedItems[0].id) || '';
 	};
 	
-	const getFormattedId = () => {
-		return multiSelect ? getMultipleId() : getSingleId();
+	const getFormattedId = (selectedItems) => {
+		return multiSelect ? getMultipleId(selectedItems) : getSingleId(selectedItems);
 	};
 	
-	const handleOnClick = (event, item) => {
+	const updateSelection = (item) => {
+		let updatedSelection = [...selection];
 		const isItemAlreadySelected = checkIsItemSelected(item.id);
 		
 		if (!isItemAlreadySelected) {
 			if (multiSelect) {
+				updatedSelection = [...selection, item];
 				setSelection([...selection, item]);
 			} else {
+				updatedSelection = [item];
 				setSelection([item]);
 			}
 		}
 		
 		if (isItemAlreadySelected && multiSelect) {
-			const selectionAfterRemoval = uncheckSelectedValue(item.id);
-			setSelection([...selectionAfterRemoval]);
+			updatedSelection = uncheckSelectedValue(item.id);
 		}
 		
-		const value = getFormattedId();
+		setSelection([...updatedSelection]);
 		
-		onChange && onChange(event, value);
+		return updatedSelection;
+	};
+	
+	const initOnChange = (updatedSelection) => {
+		const value = getFormattedId(updatedSelection);
+		
+		return Promise.resolve(onChange && onChange(null, name, value));
+	};
+	
+	const initOnBlur = () => {
+		onBlur && onBlur(null, name);
+	};
+	
+	const onItemSelected = (item) => {
+		const updatedSelection = updateSelection(item);
 
-		setIsOpen(false);
+		initOnChange(updatedSelection)
+			.then(() => {
+				if (isOpen) {
+					initOnBlur();
+				}
+				
+				setIsOpen(false);
+			});
+	};
+	
+	const handleDropdownClick = () => {
+		toggleDropdownList();
+		
+		if (isOpen) {
+			initOnBlur();
+		}
+	};
+	
+	const handleDropdownKeyUp = (event) => {
+		const { key } = event;
+
+		if ((key === 'ArrowDown') && !isOpen) {
+			return setIsOpen(true);
+		}
+		
+		if ((key === 'Escape') && isOpen) {
+			return setIsOpen(false);
+		}
+	};
+	
+	const handleListKeyPress = (event) => {
+		const { key } = event;
+
+		if ((key === 'Escape') && isOpen) {
+			return setIsOpen(false);
+		}
+		
+		if (key === 'ArrowDown') {
+			if (focusedIndex === -1) {
+				setFocusedItemId(items[0].id);
+				return setFocusedIndex(0);
+			}
+			
+			const newIndex = focusedIndex === items.length - 1 ? 0 : focusedIndex + 1;
+			setFocusedItemId(items[newIndex].id);
+			
+			return setFocusedIndex(newIndex);
+		}
+		
+		if (key === 'ArrowUp') {
+			if (focusedIndex === -1) {
+				setFocusedItemId(items[items.length - 1].id);
+				return setFocusedIndex(items.length - 1);
+			}
+			
+			const newIndex = focusedIndex === 0 ? items.length - 1 : focusedIndex - 1;
+			
+			setFocusedItemId(items[newIndex].id);
+			return setFocusedIndex(newIndex);
+		}
+		
+		if ((key === 'Enter') && items[focusedIndex]) {
+			onItemSelected(items[focusedIndex]);
+		}
+	};
+	
+	const handleListMouseEnter = () => {
+		if (focusedIndex !== -1) {
+			setFocusedIndex(-1);
+		}
+	};
+	
+	const handleListItemClick = (item) => {
+		onItemSelected(item);
 	};
 	
 	const formattedInputValue = getFormattedId();
 	const formattedDropdownValue = getFormattedValue();
-	
+
+	// [data-reach-listbox-popover]:focus-within {
+		/* -webkit-box-shadow: 0 0 4px Highlight; */
+		/* box-shadow: 0 0 4px Highlight; */
+		/* outline: 4px auto -webkit-focus-ring-color; */
+	// }
+
 	return (
 		<>
-			<div>
-				<div
-					role="button"
-					tabIndex={0}
+			<div className={classes.dropdown}>
+				<button
+					type="button"
 					aria-haspopup="listbox"
-					aria-labelledby={ariaLabeledBy}
+					aria-label={ariaLabel} // if other description absent
+					aria-labelledby={ariaLabelledBy} // which element has label for input
+					aria-describedby={ariaDescribedBy} // which element describe input
 					aria-expanded={isOpen}
-					onClick={toggle}
-					onKeyPress={toggle}
+					aria-controls={uniqueDropdownId}
+					onClick={handleDropdownClick}
+					onKeyUp={handleDropdownKeyUp}
+					ref={buttonRef}
+					className={classes.dropdown__button}
 				>
 					<div>
-						<p>{formattedDropdownValue || title}</p>
+						<p>{formattedDropdownValue || placeholder}</p>
 					</div>
 					<div>
 						{
 							isOpen ? 'Close' : 'Open'
 						}
 					</div>
-				</div>
+				</button>
 				{
 					isOpen && (
 						<ul
+							id={uniqueDropdownId}
 							role="listbox"
-							tabIndex={-1}
+							tabIndex={0}
+							ref={listRef}
 							aria-multiselectable={multiSelect}
-							aria-labelledby={ariaLabeledBy}
-							// aria-activedescendant - when element is active
+							aria-labelledby={ariaLabelledBy}
+							onKeyDown={handleListKeyPress}
+							onMouseEnter={handleListMouseEnter}
+							className={classes.dropdown__list}
+							aria-activedescendant={focusedItemId}
 						>
 							{
-								items.map((item) => {
+								items.map((item, index) => {
 									const { id, value } = item;
 									const isItemSelected = checkIsItemSelected(id);
+									
+									const dropdownLisItemClasses = classNames(
+										classes.dropdown__listItem,
+										{
+											[classes.dropdown__listItem_active]: focusedIndex === index
+										}
+									);
+									
 									return (
 										<li
 											aria-selected={isItemSelected}
 											role="option"
 											id={id}
 											key={id}
+											className={dropdownLisItemClasses}
+											onClick={() => handleListItemClick(item)}
+											// aria-readonly
 										>
-											<button
-												type="button"
-												onClick={(event) => handleOnClick(event, item)}
-											>
-												<span>{value}</span>
-												{
-													isItemSelected && <span>Selected</span>
-												}
-											</button>
+											<span>{value}</span>
+											{
+												isItemSelected && <span> 🗸</span>
+											}
 										</li>
 									)
 								})

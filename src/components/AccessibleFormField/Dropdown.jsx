@@ -1,13 +1,13 @@
 import React from 'react';
 import Label from '../Label';
-import { TextField } from '../TextField';
+import { Dropdown } from '../Dropdown';
 import { FieldError } from '../FieldError';
-import {isEmptyValue} from '../../utilities/string';
+import { isEmptyValue } from '../../utilities/string';
 
-const AccessibleInput = (
+const AccessibleDropdown = (
 	{
 		name,
-		type,
+		items,
 		label,
 		labelId,
 		onBlur,
@@ -16,11 +16,13 @@ const AccessibleInput = (
 		required,
 		fieldData,
 		ariaLabel,
+		dropdownId,
+		multiSelect,
 		placeholder,
-		ariaLabelledBy
+		ariaLabelledBy,
 	}
 ) => {
-	const { value, error } = fieldData;
+	const { error } = fieldData;
 	const errorId = isEmptyValue(error) ? '' : `${name}Error`;
 	
 	return (
@@ -31,17 +33,18 @@ const AccessibleInput = (
 			>
 				{label}
 			</Label>
-			<TextField
+			<Dropdown
 				id={name}
 				name={name}
-				type={type}
-				value={value}
+				items={items}
 				onBlur={onBlur}
 				onChange={onChange}
 				validate={validate}
 				required={required}
 				ariaLabel={ariaLabel}
+				dropdownId={dropdownId}
 				placeholder={placeholder}
+				multiSelect={multiSelect}
 				ariaLabelledBy={ariaLabelledBy}
 				ariaDescribedBy={errorId}
 			/>
@@ -57,4 +60,4 @@ const AccessibleInput = (
 	);
 };
 
-export { AccessibleInput };
+export { AccessibleDropdown };

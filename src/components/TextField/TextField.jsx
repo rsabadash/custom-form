@@ -15,7 +15,7 @@ const TextField = (
 		ariaDescribedBy
 	}
 ) => {
-	const handleBlur = event => {
+	const handleBlur = (event) => {
 		event.persist();
 		onBlur(event);
 	};
