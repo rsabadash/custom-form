@@ -2,7 +2,7 @@ import React from 'react';
 import Label from '../Label';
 import { TextField } from '../TextField';
 import { FieldError } from '../FieldError';
-import {isEmptyValue} from '../../utilities/string';
+import { isEmptyValue } from '../../utilities/string';
 
 const AccessibleInput = (
 	{
@@ -22,7 +22,7 @@ const AccessibleInput = (
 ) => {
 	const { value, error } = fieldData;
 	const errorId = isEmptyValue(error) ? '' : `${name}Error`;
-	
+
 	return (
 		<div>
 			<Label

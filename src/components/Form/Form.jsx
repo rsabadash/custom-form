@@ -16,7 +16,7 @@ const Form = (
 			allowSubmitWithError: true,
 			...config
 		};
-	}, []);
+	}, [config]);
 
 	const {
 		getValues,
@@ -51,7 +51,7 @@ const Form = (
 		getFieldValue,
 		getFieldError
 	]);
-	
+
 	const memoActionValues = useMemo(() => {
 		return {
 			resetForm,

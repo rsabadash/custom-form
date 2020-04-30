@@ -41,7 +41,7 @@ const TextField = (
 			aria-describedby={ariaDescribedBy} // which element describe input
 			autoComplete="off"
 		/>
-	)
+	);
 };
 
 TextField.defaultProps = {

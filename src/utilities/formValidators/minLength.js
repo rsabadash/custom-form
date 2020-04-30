@@ -1,4 +1,4 @@
-import { isNullOrUndefined } from "./utilities";
+import { isNullOrUndefined } from './utilities';
 
 export const minLength = (config) => (value) => {
 	const { minLength, errorMessage } = config;
@@ -6,5 +6,5 @@ export const minLength = (config) => (value) => {
 		? `Field must contains at least ${config.minLength} characters.`
 		: errorMessage;
 
-	return String(value).length < minLength ? message : null
+	return String(value).length < minLength ? message : null;
 };

@@ -23,35 +23,39 @@ const Dropdown = (
 	const [selection, setSelection] = useState([]);
 	const [focusedIndex, setFocusedIndex] = useState(-1);
 	const [focusedItemId, setFocusedItemId] = useState(null);
-	
+
 	useEffect(() => {
 		if (isOpen) {
 			if (listRef.current) {
 				listRef.current.focus();
 			}
 		}
-		
+
+		const button = buttonRef.current;
+
 		return () => {
 			if (isOpen) {
-				buttonRef.current.focus();
+				button.focus();
 			}
 		};
 	}, [isOpen]);
-	
-	const uniqueDropdownId = useMemo(() => isEmptyValue(dropdownId) ? Date.now() : dropdownId, []);
-	
+
+	const uniqueDropdownId = useMemo(() => {
+		return isEmptyValue(dropdownId) ? Date.now() : dropdownId;
+	}, [dropdownId]);
+
 	const toggleDropdownList = () => {
 		setIsOpen(!isOpen);
 	};
-	
+
 	const checkIsItemSelected = (id) => {
 		return !!selection.find((current) => current.id === id);
 	};
-	
+
 	const uncheckSelectedValue = (id) => {
 		return selection.filter((current) => current.id !== id);
 	};
-	
+
 	const getMultipleValue = (selectedItems = selection) => {
 		return selectedItems.reduce((acc, item, index) => {
 			if (index === 0) {
@@ -59,19 +63,19 @@ const Dropdown = (
 			} else {
 				acc = `${acc} | ${item.value}`;
 			}
-			
+
 			return acc;
 		}, '');
 	};
-	
+
 	const getSingleValue = (selectedItems = selection) => {
 		return (selectedItems[0] && selectedItems[0].value) || '';
 	};
-	
+
 	const getFormattedValue = (selectedItems) => {
 		return multiSelect ? getMultipleValue(selectedItems) : getSingleValue(selectedItems);
 	};
-	
+
 	const getMultipleId = (selectedItems = selection) => {
 		return selectedItems.reduce((acc, item) => {
 			acc.push(item.id);
@@ -79,19 +83,19 @@ const Dropdown = (
 			return acc;
 		}, []);
 	};
-	
+
 	const getSingleId = (selectedItems = selection) => {
 		return (selectedItems[0] && selectedItems[0].id) || '';
 	};
-	
+
 	const getFormattedId = (selectedItems) => {
 		return multiSelect ? getMultipleId(selectedItems) : getSingleId(selectedItems);
 	};
-	
+
 	const updateSelection = (item) => {
 		let updatedSelection = [...selection];
 		const isItemAlreadySelected = checkIsItemSelected(item.id);
-		
+
 		if (!isItemAlreadySelected) {
 			if (multiSelect) {
 				updatedSelection = [...selection, item];
@@ -101,26 +105,26 @@ const Dropdown = (
 				setSelection([item]);
 			}
 		}
-		
+
 		if (isItemAlreadySelected && multiSelect) {
 			updatedSelection = uncheckSelectedValue(item.id);
 		}
-		
+
 		setSelection([...updatedSelection]);
-		
+
 		return updatedSelection;
 	};
-	
+
 	const initOnChange = (updatedSelection) => {
 		const value = getFormattedId(updatedSelection);
-		
+
 		return Promise.resolve(onChange && onChange(null, name, value));
 	};
-	
+
 	const initOnBlur = () => {
 		onBlur && onBlur(null, name);
 	};
-	
+
 	const onItemSelected = (item) => {
 		const updatedSelection = updateSelection(item);
 
@@ -129,84 +133,88 @@ const Dropdown = (
 				if (isOpen) {
 					initOnBlur();
 				}
-				
+
 				setIsOpen(false);
 			});
 	};
-	
+
 	const handleDropdownClick = () => {
 		toggleDropdownList();
-		
+
 		if (isOpen) {
 			initOnBlur();
 		}
 	};
-	
+
 	const handleDropdownKeyUp = (event) => {
 		const { key } = event;
 
 		if ((key === 'ArrowDown') && !isOpen) {
 			return setIsOpen(true);
 		}
-		
+
 		if ((key === 'Escape') && isOpen) {
 			return setIsOpen(false);
 		}
 	};
-	
-	const handleListKeyPress = (event) => {
+
+	const handleListKeyDown = (event) => {
 		const { key } = event;
 
 		if ((key === 'Escape') && isOpen) {
 			return setIsOpen(false);
 		}
-		
+
 		if (key === 'ArrowDown') {
 			if (focusedIndex === -1) {
 				setFocusedItemId(items[0].id);
 				return setFocusedIndex(0);
 			}
-			
+
 			const newIndex = focusedIndex === items.length - 1 ? 0 : focusedIndex + 1;
 			setFocusedItemId(items[newIndex].id);
-			
+
 			return setFocusedIndex(newIndex);
 		}
-		
+
 		if (key === 'ArrowUp') {
 			if (focusedIndex === -1) {
 				setFocusedItemId(items[items.length - 1].id);
 				return setFocusedIndex(items.length - 1);
 			}
-			
+
 			const newIndex = focusedIndex === 0 ? items.length - 1 : focusedIndex - 1;
-			
+
 			setFocusedItemId(items[newIndex].id);
 			return setFocusedIndex(newIndex);
 		}
-		
-		if ((key === 'Enter') && items[focusedIndex]) {
-			onItemSelected(items[focusedIndex]);
-		}
 	};
-	
+
 	const handleListMouseEnter = () => {
 		if (focusedIndex !== -1) {
 			setFocusedIndex(-1);
 		}
 	};
-	
+
 	const handleListItemClick = (item) => {
 		onItemSelected(item);
 	};
-	
+
+	const handleListItemKeyDown = (event) => {
+		const { key } = event;
+
+		if ((key === 'Enter') && items[focusedIndex]) {
+			onItemSelected(items[focusedIndex]);
+		}
+	};
+
 	const formattedInputValue = getFormattedId();
 	const formattedDropdownValue = getFormattedValue();
 
 	// [data-reach-listbox-popover]:focus-within {
-		/* -webkit-box-shadow: 0 0 4px Highlight; */
-		/* box-shadow: 0 0 4px Highlight; */
-		/* outline: 4px auto -webkit-focus-ring-color; */
+	/* -webkit-box-shadow: 0 0 4px Highlight; */
+	/* box-shadow: 0 0 4px Highlight; */
+	/* outline: 4px auto -webkit-focus-ring-color; */
 	// }
 
 	return (
@@ -243,7 +251,7 @@ const Dropdown = (
 							ref={listRef}
 							aria-multiselectable={multiSelect}
 							aria-labelledby={ariaLabelledBy}
-							onKeyDown={handleListKeyPress}
+							onKeyDown={handleListKeyDown}
 							onMouseEnter={handleListMouseEnter}
 							className={classes.dropdown__list}
 							aria-activedescendant={focusedItemId}
@@ -252,14 +260,14 @@ const Dropdown = (
 								items.map((item, index) => {
 									const { id, value } = item;
 									const isItemSelected = checkIsItemSelected(id);
-									
+
 									const dropdownLisItemClasses = classNames(
 										classes.dropdown__listItem,
 										{
 											[classes.dropdown__listItem_active]: focusedIndex === index
 										}
 									);
-									
+
 									return (
 										<li
 											aria-selected={isItemSelected}
@@ -268,6 +276,7 @@ const Dropdown = (
 											key={id}
 											className={dropdownLisItemClasses}
 											onClick={() => handleListItemClick(item)}
+											onKeyDown={handleListItemKeyDown}
 											// aria-readonly
 										>
 											<span>{value}</span>
@@ -275,7 +284,7 @@ const Dropdown = (
 												isItemSelected && <span> 🗸</span>
 											}
 										</li>
-									)
+									);
 								})
 							}
 						</ul>

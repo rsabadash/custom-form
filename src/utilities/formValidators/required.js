@@ -6,5 +6,5 @@ export const required = (config = {}) => (value) => {
 		? 'Required'
 		: errorMessage;
 
-	return isEmptyValue(value) ? message : null
+	return isEmptyValue(value) ? message : null;
 };

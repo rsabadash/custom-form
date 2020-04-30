@@ -1,4 +1,4 @@
-import { actions } from "./consts";
+import { actions } from './consts';
 
 export const setFieldTouchedAction = (fieldName, value, dispatch) => {
 	dispatch({

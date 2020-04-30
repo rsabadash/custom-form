@@ -1,4 +1,4 @@
-import { actions} from './consts';
+import { actions } from './consts';
 
 export const formReducer = (state, action) => {
 	// console.log(action.type);

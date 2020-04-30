@@ -1,0 +1,39 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2019,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "jsx-a11y"
+    ],
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:jsx-a11y/recommended"
+    ],
+    "rules": {
+        "react/prop-types": 0,
+        "quotes": ["error", "single"],
+        "object-curly-spacing": ["error", "always"],
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "max-len": ["error", { "code": 200, "tabWidth": 4, "ignoreUrls": true }],
+        "indent": ["error", "tab", { "SwitchCase": 1 }],
+        "semi": "error",
+        "eqeqeq": ["error", "always"],
+        "curly": "error",
+        "brace-style": "error",
+        "no-case-declarations": 0,
+        "arrow-body-style": 0
+    }
+}

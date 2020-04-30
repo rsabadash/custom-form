@@ -19,7 +19,7 @@ const Field = (
 		getFieldValue,
 		getFieldError
 	} = useFormState();
-	
+
 	useEffect(() => {
 		registerField(props.name);
 
@@ -57,7 +57,13 @@ const Field = (
 				error
 			}
 		});
-	}, [value, error]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [
+		value,
+		error,
+		component,
+		getFieldHandlers
+	]);
 };
 
 export { Field };
