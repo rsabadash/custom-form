@@ -131,6 +131,24 @@ export const useForm = (
 		}
 	});
 
+	const isCheckbox = (type) => {
+		return type === 'checkbox';
+	};
+
+	const getInputValue = useCallback((target) => {
+		let { value, type, name } = target;
+
+		if (isCheckbox(type)) {
+			const fieldValue = getFieldValue(name);
+
+			if (typeof fieldValue === 'boolean') {
+				value = !fieldValue;
+			}
+		}
+
+		return value;
+	}, [getFieldValue]);
+
 	const handleBlur = useEventCallback((event, name) => {
 		let fieldName = name;
 
@@ -155,8 +173,10 @@ export const useForm = (
 		let fieldValue = value;
 
 		if (event) {
+			const inputValue = getInputValue(event.target);
+
 			fieldName = event.target.name;
-			fieldValue = event.target.value;
+			fieldValue = inputValue;
 		}
 
 		setFieldValueAction(fieldName, fieldValue, dispatch);

@@ -6,5 +6,11 @@ export const required = (config = {}) => (value) => {
 		? 'Required'
 		: errorMessage;
 
-	return isEmptyValue(value) ? message : null;
+	let isValidValue = isEmptyValue(value);
+
+	if (typeof value === 'boolean') {
+		isValidValue = !value;
+	}
+
+	return isValidValue ? message : null;
 };

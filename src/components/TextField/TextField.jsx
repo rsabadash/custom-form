@@ -6,13 +6,15 @@ const TextField = (
 		type,
 		value,
 		onBlur,
+		invalid,
 		onChange,
 		disabled,
 		required,
 		ariaLabel,
 		placeholder,
 		ariaLabelledBy,
-		ariaDescribedBy
+		ariaDescribedBy,
+		inputClassName
 	}
 ) => {
 	const handleBlur = (event) => {
@@ -37,9 +39,11 @@ const TextField = (
 			onChange={handleChange}
 			aria-label={ariaLabel} // if other description absent
 			placeholder={placeholder}
+			aria-invalid={invalid} // if value invalid
 			aria-labelledby={ariaLabelledBy} // which element has label for input
 			aria-describedby={ariaDescribedBy} // which element describe input
 			autoComplete="off"
+			className={inputClassName}
 		/>
 	);
 };

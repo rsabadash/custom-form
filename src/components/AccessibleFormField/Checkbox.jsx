@@ -1,58 +1,57 @@
 import React from 'react';
+import classNames from 'classnames';
 import Label from '../Label';
-import { Dropdown } from '../Dropdown';
+import { Checkbox } from '../Checkbox';
 import { FieldError } from '../FieldError';
 import { isEmptyValue } from '../../utilities/string';
 import classes from './styles/index.scss';
 
-const AccessibleDropdown = (
+const AccessibleCheckbox = (
 	{
 		name,
-		items,
 		label,
 		labelId,
 		onBlur,
 		onChange,
 		validate,
-		disabled,
 		required,
+		disabled,
 		fieldData,
 		ariaLabel,
-		dropdownId,
-		multiSelect,
-		placeholder,
-		ariaLabelledBy,
+		ariaLabelledBy
 	}
 ) => {
-	const { error } = fieldData;
+	const { error, value } = fieldData;
 	const errorId = isEmptyValue(error) ? '' : `${name}Error`;
 
+	const checkboxClassNames = classNames(
+		classes.accessibleFormField__checkbox,
+		classes.accessibleHidden
+	);
+
 	return (
-		<div>
-			<Label
-				labelId={labelId}
-				htmlFor={name}
-			>
-				{label}
-			</Label>
-			<Dropdown
+		<div className={classes.accessibleFormField}>
+			<Checkbox
 				id={name}
 				name={name}
-				items={items}
 				onBlur={onBlur}
 				onChange={onChange}
 				validate={validate}
+				checked={value}
 				disabled={disabled}
 				required={required}
 				ariaLabel={ariaLabel}
-				dropdownId={dropdownId}
-				placeholder={placeholder}
-				multiSelect={multiSelect}
 				ariaLabelledBy={ariaLabelledBy}
 				ariaDescribedBy={errorId}
-				dropdownButtonClassName={classes.accessibleFormField__dropdown}
-				dropdownListClassName={classes.accessibleFormField__dropdownList}
+				checkboxClassName={checkboxClassNames}
 			/>
+			<Label
+				labelId={labelId}
+				htmlFor={name}
+				labelClassName={classes.accessibleFormField__label}
+			>
+				{label}
+			</Label>
 			{
 				error && (
 					<FieldError
@@ -65,4 +64,4 @@ const AccessibleDropdown = (
 	);
 };
 
-export { AccessibleDropdown };
+export { AccessibleCheckbox };

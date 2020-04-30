@@ -1,0 +1,17 @@
+@import "accessibleMixins";
+
+.accessibleFormField__dropdown {
+	border: 1px solid transparent;
+}
+
+.accessibleFormField__dropdown:focus {
+	@include accessibleFocus;
+}
+
+.accessibleFormField__dropdownList {
+	border: 1px solid transparent;
+}
+
+.accessibleFormField__dropdownList:focus {
+	@include accessibleFocus;
+}

@@ -1,0 +1,6 @@
+$accessible-focus-color: #51cbee;
+
+@mixin accessibleFocus {
+	box-shadow: 0 0 5px $accessible-focus-color;
+	border: 1px solid $accessible-focus-color;
+}

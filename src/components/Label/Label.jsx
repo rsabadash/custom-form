@@ -4,13 +4,15 @@ const Label = (
 	{
 		labelId,
 		htmlFor,
-		children
+		children,
+		labelClassName
 	}
 ) => {
 	return (
 		<label
-			id={labelId}
+			id={labelId} // for aria-labelledby
 			htmlFor={htmlFor}
+			className={labelClassName}
 		>
 			{children && children}
 		</label>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Field } from './components/Form';
-import { Input, Dropdown } from './components/AccessibleFormField';
+import { Input, Dropdown, Checkbox } from './components/AccessibleFormField';
 import { AccessibleForm } from './components/AccessibleForm';
 import { required, minLength } from './utilities/formValidators';
 
@@ -24,13 +24,13 @@ const TestForm = () => {
 			value: 'Blade Runner 2049'
 		}
 	];
-	
+
 	return (
 		<AccessibleForm
 			onSubmit={console.log}
 			formTitle="Contacts"
 			ariaLabelledBy="testForm"
-			initialValues={{ firstName: 'John' }}
+			initialValues={{ firstName: 'John', agree: true }}
 		>
 			<Field
 				required
@@ -53,6 +53,12 @@ const TestForm = () => {
 				items={items}
 				name="movie"
 				component={Dropdown}
+				validate={[required()]}
+			/>
+			<Field
+				label="Are you agree?"
+				name="agree"
+				component={Checkbox}
 				validate={[required()]}
 			/>
 			<input type="submit" value="Submit" />

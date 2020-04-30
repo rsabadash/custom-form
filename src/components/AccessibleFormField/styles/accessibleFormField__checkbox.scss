@@ -1,0 +1,42 @@
+@import "accessibleMixins";
+
+.accessibleFormField__checkbox {
+	cursor: pointer;
+}
+
+.accessibleFormField__checkbox + .accessibleFormField__label:before {
+	content: "";
+	display: inline-block;
+	vertical-align: middle;
+	width: 20px;
+	height: 20px;
+	border: 1px solid #000000;
+	margin-right: 8px;
+}
+
+.accessibleFormField__checkbox:checked + .accessibleFormField__label::before {
+	border-color: #000000;
+}
+
+.accessibleFormField__checkbox:focus + .accessibleFormField__label::before {
+	@include accessibleFocus;
+}
+
+.accessibleFormField__checkbox + .accessibleFormField__label::after {
+	content: "";
+	border: 2px solid #000000;
+	border-left: 0;
+	border-top: 0;
+	height: 13px;
+	left: 7px;
+	opacity: 0;
+	position: absolute;
+	top: 2px;
+	transform: rotate(45deg);
+	transition: opacity 0.2s ease-in-out;
+	width: 7px;
+}
+
+.accessibleFormField__checkbox:checked + .accessibleFormField__label::after {
+	opacity: 1;
+}

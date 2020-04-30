@@ -11,10 +11,12 @@ const Dropdown = (
 		multiSelect,
 		onChange,
 		onBlur,
+		dropdownId,
 		ariaLabel,
 		ariaDescribedBy,
 		ariaLabelledBy,
-		dropdownId
+		dropdownButtonClassName,
+		dropdownListClassName
 	}
 ) => {
 	const listRef = useRef(null);
@@ -39,6 +41,16 @@ const Dropdown = (
 			}
 		};
 	}, [isOpen]);
+
+	const dropdownButtonClassNames = classNames(
+		classes.dropdown__button,
+		dropdownButtonClassName
+	);
+
+	const dropdownListClassNames = classNames(
+		classes.dropdown__list,
+		dropdownListClassName
+	);
 
 	const uniqueDropdownId = useMemo(() => {
 		return isEmptyValue(dropdownId) ? Date.now() : dropdownId;
@@ -231,7 +243,7 @@ const Dropdown = (
 					onClick={handleDropdownClick}
 					onKeyUp={handleDropdownKeyUp}
 					ref={buttonRef}
-					className={classes.dropdown__button}
+					className={dropdownButtonClassNames}
 				>
 					<div>
 						<p>{formattedDropdownValue || placeholder}</p>
@@ -253,7 +265,7 @@ const Dropdown = (
 							aria-labelledby={ariaLabelledBy}
 							onKeyDown={handleListKeyDown}
 							onMouseEnter={handleListMouseEnter}
-							className={classes.dropdown__list}
+							className={dropdownListClassNames}
 							aria-activedescendant={focusedItemId}
 						>
 							{

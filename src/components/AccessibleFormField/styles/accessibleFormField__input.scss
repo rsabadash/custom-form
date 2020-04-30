@@ -1,0 +1,9 @@
+@import "accessibleMixins";
+
+.accessibleFormField__input {
+	border: 1px solid #000000;
+}
+
+.accessibleFormField__input:focus {
+	@include accessibleFocus;
+}
