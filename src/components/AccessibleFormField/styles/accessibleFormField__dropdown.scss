@@ -1,7 +1,8 @@
 @import "accessibleMixins";
+@import "../../../variables";
 
 .accessibleFormField__dropdown {
-	border: 1px solid transparent;
+	box-sizing: border-box;
 }
 
 .accessibleFormField__dropdown:focus {
@@ -9,9 +10,18 @@
 }
 
 .accessibleFormField__dropdownList {
-	border: 1px solid transparent;
+
 }
 
 .accessibleFormField__dropdownList:focus {
 	@include accessibleFocus;
+	box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+}
+
+.accessibleFormField__dropdownListItem {
+
+}
+
+.accessibleFormField__dropdownListItem:hover {
+
 }

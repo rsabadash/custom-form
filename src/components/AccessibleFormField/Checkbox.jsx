@@ -13,7 +13,6 @@ const AccessibleCheckbox = (
 		labelId,
 		onBlur,
 		onChange,
-		validate,
 		required,
 		disabled,
 		fieldData,
@@ -24,7 +23,7 @@ const AccessibleCheckbox = (
 	const { error, value } = fieldData;
 	const errorId = isEmptyValue(error) ? '' : `${name}Error`;
 
-	const checkboxClassNames = classNames(
+	const checkboxClasses = classNames(
 		classes.accessibleFormField__checkbox,
 		classes.accessibleHidden
 	);
@@ -36,14 +35,13 @@ const AccessibleCheckbox = (
 				name={name}
 				onBlur={onBlur}
 				onChange={onChange}
-				validate={validate}
 				checked={value}
 				disabled={disabled}
 				required={required}
 				ariaLabel={ariaLabel}
 				ariaLabelledBy={ariaLabelledBy}
 				ariaDescribedBy={errorId}
-				checkboxClassName={checkboxClassNames}
+				checkboxClassName={checkboxClasses}
 			/>
 			<Label
 				labelId={labelId}

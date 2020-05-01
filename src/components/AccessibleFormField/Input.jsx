@@ -13,7 +13,6 @@ const AccessibleInput = (
 		labelId,
 		onBlur,
 		onChange,
-		validate,
 		disabled,
 		required,
 		fieldData,
@@ -26,10 +25,11 @@ const AccessibleInput = (
 	const errorId = isEmptyValue(error) ? '' : `${name}Error`;
 
 	return (
-		<div>
+		<div className={classes.accessibleFormField}>
 			<Label
 				labelId={labelId}
 				htmlFor={name}
+				labelClassName={classes.accessibleFormField__label}
 			>
 				{label}
 			</Label>
@@ -41,7 +41,6 @@ const AccessibleInput = (
 				onBlur={onBlur}
 				invalid={!!error}
 				onChange={onChange}
-				validate={validate}
 				disabled={disabled}
 				required={required}
 				ariaLabel={ariaLabel}

@@ -1,4 +1,5 @@
 import React from 'react';
+import classes from './styles/index.scss';
 
 const FieldError = (
 	{
@@ -7,13 +8,14 @@ const FieldError = (
 	}
 ) => {
 	return (
-		<span
+		<div
 			id={id}
 			role="status"
 			aria-live="polite"
+			className={classes.fieldError}
 		>
 			{errorMessage}
-		</span>
+		</div>
 	);
 };
 

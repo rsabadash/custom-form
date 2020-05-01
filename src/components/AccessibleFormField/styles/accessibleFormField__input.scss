@@ -1,7 +1,17 @@
 @import "accessibleMixins";
+@import "../../../variables";
 
 .accessibleFormField__input {
-	border: 1px solid #000000;
+	display: block;
+	width: 100%;
+	padding: 8px 12px;
+	font-size: 14px;
+	color: $font-color;
+	background-color: #ffffff;
+	border-radius: 2px;
+	border: 1px solid #ced4da;
+	transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+	box-sizing: border-box;
 }
 
 .accessibleFormField__input:focus {

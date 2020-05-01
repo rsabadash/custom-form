@@ -11,12 +11,15 @@ const Dropdown = (
 		multiSelect,
 		onChange,
 		onBlur,
-		dropdownId,
+		// required,
+		disabled,
+		dropdownIdForListControl,
 		ariaLabel,
 		ariaDescribedBy,
 		ariaLabelledBy,
-		dropdownButtonClassName,
-		dropdownListClassName
+		dropdownButtonClass,
+		dropdownListClass,
+		dropdownListItemClass
 	}
 ) => {
 	const listRef = useRef(null);
@@ -25,39 +28,46 @@ const Dropdown = (
 	const [selection, setSelection] = useState([]);
 	const [focusedIndex, setFocusedIndex] = useState(-1);
 	const [focusedItemId, setFocusedItemId] = useState(null);
+	const [isKeyBoardNavigation, setIsKeyBoardNavigation] = useState(false);
 
 	useEffect(() => {
-		if (isOpen) {
-			if (listRef.current) {
-				listRef.current.focus();
-			}
-		}
-
-		const button = buttonRef.current;
-
-		return () => {
+		if (isKeyBoardNavigation) {
 			if (isOpen) {
-				button.focus();
+				if (listRef.current) {
+					listRef.current.focus();
+				}
 			}
-		};
-	}, [isOpen]);
 
-	const dropdownButtonClassNames = classNames(
+			const button = buttonRef.current;
+
+			return () => {
+				if (isOpen) {
+					button.focus();
+				}
+			};
+		}
+	}, [isOpen, isKeyBoardNavigation]);
+
+	const dropdownButtonClasses = classNames(
 		classes.dropdown__button,
-		dropdownButtonClassName
+		dropdownButtonClass
 	);
 
-	const dropdownListClassNames = classNames(
+	const dropdownListClasses = classNames(
 		classes.dropdown__list,
-		dropdownListClassName
+		dropdownListClass
 	);
 
-	const uniqueDropdownId = useMemo(() => {
-		return isEmptyValue(dropdownId) ? Date.now() : dropdownId;
-	}, [dropdownId]);
+	const uniqueDropdownIdForListControl = useMemo(() => {
+		return isEmptyValue(dropdownIdForListControl) ? Date.now() : dropdownIdForListControl;
+	}, [dropdownIdForListControl]);
 
 	const toggleDropdownList = () => {
 		setIsOpen(!isOpen);
+	};
+
+	const toggleIsKeyBoardNavigation = () => {
+		setIsKeyBoardNavigation(!isKeyBoardNavigation);
 	};
 
 	const checkIsItemSelected = (id) => {
@@ -68,7 +78,7 @@ const Dropdown = (
 		return selection.filter((current) => current.id !== id);
 	};
 
-	const getMultipleValue = (selectedItems = selection) => {
+	const getMultipleValue = (selectedItems ) => {
 		return selectedItems.reduce((acc, item, index) => {
 			if (index === 0) {
 				acc = `${item.value}`;
@@ -80,15 +90,15 @@ const Dropdown = (
 		}, '');
 	};
 
-	const getSingleValue = (selectedItems = selection) => {
+	const getSingleValue = (selectedItems) => {
 		return (selectedItems[0] && selectedItems[0].value) || '';
 	};
 
-	const getFormattedValue = (selectedItems) => {
+	const getFormattedValue = (selectedItems = selection) => {
 		return multiSelect ? getMultipleValue(selectedItems) : getSingleValue(selectedItems);
 	};
 
-	const getMultipleId = (selectedItems = selection) => {
+	const getMultipleId = (selectedItems) => {
 		return selectedItems.reduce((acc, item) => {
 			acc.push(item.id);
 
@@ -96,11 +106,11 @@ const Dropdown = (
 		}, []);
 	};
 
-	const getSingleId = (selectedItems = selection) => {
+	const getSingleId = (selectedItems) => {
 		return (selectedItems[0] && selectedItems[0].id) || '';
 	};
 
-	const getFormattedId = (selectedItems) => {
+	const getFormattedId = (selectedItems = selection) => {
 		return multiSelect ? getMultipleId(selectedItems) : getSingleId(selectedItems);
 	};
 
@@ -142,20 +152,36 @@ const Dropdown = (
 
 		initOnChange(updatedSelection)
 			.then(() => {
-				if (isOpen) {
+				if (isOpen && !multiSelect) {
 					initOnBlur();
+					setIsOpen(false);
 				}
-
-				setIsOpen(false);
 			});
 	};
 
-	const handleDropdownClick = () => {
-		toggleDropdownList();
+	const isMouseClick = (clientX) => {
+		return clientX > 0;
+	};
 
-		if (isOpen) {
-			initOnBlur();
+	const handleDropdownClick = (event) => {
+		if (disabled) {
+			return;
 		}
+
+		const { clientX } = event;
+		// Check if it is a mouse click, because if you press enter that event will fire too.
+		// This checking needs to prevent dropdown list autofocus when user manipulate by mouse.
+		const isClick = isMouseClick(clientX);
+
+		if (!isClick && !isKeyBoardNavigation) {
+			toggleIsKeyBoardNavigation();
+		}
+
+		if (isClick && isKeyBoardNavigation) {
+			toggleIsKeyBoardNavigation();
+		}
+
+		toggleDropdownList();
 	};
 
 	const handleDropdownKeyUp = (event) => {
@@ -170,10 +196,16 @@ const Dropdown = (
 		}
 	};
 
+	const handleDropdownBlur = () => {
+		if (!isOpen) {
+			initOnBlur();
+		}
+	};
+
 	const handleListKeyDown = (event) => {
 		const { key } = event;
 
-		if ((key === 'Escape') && isOpen) {
+		if ((key === 'Escape' || key === 'Tab') && isOpen) {
 			return setIsOpen(false);
 		}
 
@@ -200,9 +232,13 @@ const Dropdown = (
 			setFocusedItemId(items[newIndex].id);
 			return setFocusedIndex(newIndex);
 		}
+
+		if ((key === 'Enter') && items[focusedIndex]) {
+			onItemSelected(items[focusedIndex]);
+		}
 	};
 
-	const handleListMouseEnter = () => {
+	const handleListMouseMove = () => {
 		if (focusedIndex !== -1) {
 			setFocusedIndex(-1);
 		}
@@ -231,41 +267,42 @@ const Dropdown = (
 
 	return (
 		<>
-			<div className={classes.dropdown}>
+			<div
+				className={classes.dropdown}
+			>
+				{/* eslint-disable-next-line jsx-a11y/role-supports-aria-props */}
 				<button
 					type="button"
 					aria-haspopup="listbox"
+					disabled={disabled}
 					aria-label={ariaLabel} // if other description absent
 					aria-labelledby={ariaLabelledBy} // which element has label for input
 					aria-describedby={ariaDescribedBy} // which element describe input
 					aria-expanded={isOpen}
-					aria-controls={uniqueDropdownId}
+					aria-controls={uniqueDropdownIdForListControl}
 					onClick={handleDropdownClick}
 					onKeyUp={handleDropdownKeyUp}
+					onBlur={handleDropdownBlur}
 					ref={buttonRef}
-					className={dropdownButtonClassNames}
+					className={dropdownButtonClasses}
 				>
-					<div>
-						<p>{formattedDropdownValue || placeholder}</p>
+					<div className={classes.dropdown__buttonText}>
+						{formattedDropdownValue || placeholder}
 					</div>
-					<div>
-						{
-							isOpen ? 'Close' : 'Open'
-						}
-					</div>
+					<div>{isOpen ? '↟' : '↡'}</div>
 				</button>
 				{
 					isOpen && (
 						<ul
-							id={uniqueDropdownId}
+							id={uniqueDropdownIdForListControl}
 							role="listbox"
 							tabIndex={0}
 							ref={listRef}
 							aria-multiselectable={multiSelect}
 							aria-labelledby={ariaLabelledBy}
 							onKeyDown={handleListKeyDown}
-							onMouseEnter={handleListMouseEnter}
-							className={dropdownListClassNames}
+							onMouseMove={handleListMouseMove}
+							className={dropdownListClasses}
 							aria-activedescendant={focusedItemId}
 						>
 							{
@@ -273,11 +310,12 @@ const Dropdown = (
 									const { id, value } = item;
 									const isItemSelected = checkIsItemSelected(id);
 
-									const dropdownLisItemClasses = classNames(
+									const dropdownListItemClasses = classNames(
 										classes.dropdown__listItem,
 										{
 											[classes.dropdown__listItem_active]: focusedIndex === index
-										}
+										},
+										dropdownListItemClass
 									);
 
 									return (
@@ -286,7 +324,7 @@ const Dropdown = (
 											role="option"
 											id={id}
 											key={id}
-											className={dropdownLisItemClasses}
+											className={dropdownListItemClasses}
 											onClick={() => handleListItemClick(item)}
 											onKeyDown={handleListItemKeyDown}
 											// aria-readonly

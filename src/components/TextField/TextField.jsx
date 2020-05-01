@@ -37,6 +37,7 @@ const TextField = (
 			required={required}
 			onBlur={handleBlur}
 			onChange={handleChange}
+			aria-required={required} // could be avoidable, but in this case used, cause React doesn't show require attribute and voice doesn't announce that field is required
 			aria-label={ariaLabel} // if other description absent
 			placeholder={placeholder}
 			aria-invalid={invalid} // if value invalid

@@ -1,0 +1,20 @@
+.radioButtonGroup {
+
+}
+
+.radioButtonGroup__title {
+
+}
+
+.radioButtonGroup__radioButtonsContainer {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.radioButtonGroup__radioButton {
+	margin-left: 16px;
+}
+
+.radioButtonGroup__radioButton:first-child {
+	margin-left: 0;
+}

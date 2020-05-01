@@ -1,0 +1,53 @@
+@import "accessibleMixins";
+@import "../../../variables";
+
+.accessibleFormField__radioButton {
+	margin: 0;
+}
+
+.accessibleFormField__radioButton.accessibleHidden {
+	height: 24px;
+	width: 24px;
+}
+
+.accessibleFormField__radioButton + .accessibleFormField__label {
+	position: relative;
+	margin-bottom: 0;
+}
+
+.accessibleFormField__radioButton + .accessibleFormField__label:before {
+	content: "";
+	display: inline-block;
+	vertical-align: middle;
+	border-radius: 50%;
+	border: 1px solid #ced4da;
+	background: #ffffff;
+	width: 24px;
+	height: 24px;
+	margin-right: 4px;
+}
+
+.accessibleFormField__radioButton:focus + .accessibleFormField__label::before {
+	@include accessibleFocus;
+}
+
+.accessibleFormField__radioButton + .accessibleFormField__label::after {
+	content: "";
+	position: absolute;
+	display: inline-block;
+	left: 5px;
+	top: 5px;
+	border-radius: 50%;
+	width: 16px;
+	height: 16px;
+	background: $font-color;
+	opacity: 0;
+}
+
+.accessibleFormField__radioButton:checked + .accessibleFormField__label::after {
+	opacity: 1;
+}
+
+.accessibleFormField__radioButtonWrapper {
+	display: flex;
+}

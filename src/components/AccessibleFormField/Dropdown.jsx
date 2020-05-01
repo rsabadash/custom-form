@@ -13,7 +13,6 @@ const AccessibleDropdown = (
 		labelId,
 		onBlur,
 		onChange,
-		validate,
 		disabled,
 		required,
 		fieldData,
@@ -26,32 +25,34 @@ const AccessibleDropdown = (
 ) => {
 	const { error } = fieldData;
 	const errorId = isEmptyValue(error) ? '' : `${name}Error`;
+	const labelledBy = isEmptyValue(ariaLabelledBy) ? name : ariaLabelledBy;
+	const idForLabel = isEmptyValue(labelId) ? labelledBy : labelId;
 
 	return (
-		<div>
+		<div className={classes.accessibleFormField}>
 			<Label
-				labelId={labelId}
+				labelId={idForLabel}
 				htmlFor={name}
+				labelClassName={classes.accessibleFormField__label}
 			>
 				{label}
 			</Label>
 			<Dropdown
-				id={name}
 				name={name}
 				items={items}
 				onBlur={onBlur}
 				onChange={onChange}
-				validate={validate}
 				disabled={disabled}
 				required={required}
 				ariaLabel={ariaLabel}
 				dropdownId={dropdownId}
 				placeholder={placeholder}
 				multiSelect={multiSelect}
-				ariaLabelledBy={ariaLabelledBy}
+				ariaLabelledBy={labelledBy}
 				ariaDescribedBy={errorId}
-				dropdownButtonClassName={classes.accessibleFormField__dropdown}
-				dropdownListClassName={classes.accessibleFormField__dropdownList}
+				dropdownButtonClass={classes.accessibleFormField__dropdown}
+				dropdownListClass={classes.accessibleFormField__dropdownList}
+				dropdownListItemClass={classes.accessibleFormField__dropdownListItem}
 			/>
 			{
 				error && (
