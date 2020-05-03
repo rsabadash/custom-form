@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './main.scss';
 
-import TestForm from './TestForm';
+import { App } from './App';
 
 if (process.env.NODE_ENV !== 'production') {
 	const axe = require('react-axe');
@@ -10,6 +10,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 ReactDOM.render(
-	<TestForm />,
+	<App />,
 	document.querySelector('#root')
 );

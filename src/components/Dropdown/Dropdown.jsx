@@ -1,8 +1,10 @@
-import React, { useRef, useMemo, useState, useEffect } from 'react';
+import React, { useRef, useMemo, useState, useEffect, useLayoutEffect } from 'react';
 import classNames from 'classnames';
 import { isEmptyValue } from '../../utilities/string';
 import classes from './styles/dropdown.scss';
 // ADD POSSIBILITY FOR INITIAL STATE
+// const visibleItems = 7;
+
 const Dropdown = (
 	{
 		name,
@@ -23,13 +25,36 @@ const Dropdown = (
 	}
 ) => {
 	const listRef = useRef(null);
-	const buttonRef = useRef(null);
+	const dropdownButtonRef = useRef(null);
+	const currentListItemRef = useRef(null);
 	const [isOpen, setIsOpen] = useState(false);
 	const [selection, setSelection] = useState([]);
 	const [focusedIndex, setFocusedIndex] = useState(-1);
 	const [focusedItemId, setFocusedItemId] = useState(null);
 	const [isKeyBoardNavigation, setIsKeyBoardNavigation] = useState(false);
 
+	const handleOutsideDropdownClick = (event) => {
+		if (dropdownButtonRef.current && dropdownButtonRef.current.contains(event.target)) {
+			return;
+		}
+		
+		setIsOpen(false);
+	};
+	
+	useEffect(() => {
+		if (isOpen) {
+			document.addEventListener('click', handleOutsideDropdownClick);
+		}
+		
+		return () => {
+			if (isOpen) {
+				document.removeEventListener('click', handleOutsideDropdownClick);
+			}
+		};
+	}, [
+		isOpen
+	]);
+	
 	useEffect(() => {
 		if (isKeyBoardNavigation) {
 			if (isOpen) {
@@ -38,7 +63,7 @@ const Dropdown = (
 				}
 			}
 
-			const button = buttonRef.current;
+			const button = dropdownButtonRef.current;
 
 			return () => {
 				if (isOpen) {
@@ -48,6 +73,17 @@ const Dropdown = (
 		}
 	}, [isOpen, isKeyBoardNavigation]);
 
+	useLayoutEffect(() => {
+		if (currentListItemRef.current) {
+			currentListItemRef.current.scrollIntoView({
+				behavior: 'smooth',
+				block: 'end'
+			});
+			
+			resetCurrentListItemRef();
+		}
+	}, [focusedIndex]);
+	
 	const dropdownButtonClasses = classNames(
 		classes.dropdown__button,
 		dropdownButtonClass
@@ -70,6 +106,14 @@ const Dropdown = (
 		setIsKeyBoardNavigation(!isKeyBoardNavigation);
 	};
 
+	const setCurrentListItemRef = (element) => {
+		currentListItemRef.current = element;
+	};
+	
+	const resetCurrentListItemRef = () => {
+		currentListItemRef.current = null;
+	};
+	
 	const checkIsItemSelected = (id) => {
 		return !!selection.find((current) => current.id === id);
 	};
@@ -201,34 +245,43 @@ const Dropdown = (
 			initOnBlur();
 		}
 	};
-
+	
 	const handleListKeyDown = (event) => {
-		const { key } = event;
-
+		event.preventDefault();
+		const { key, target } = event;
+		
 		if ((key === 'Escape' || key === 'Tab') && isOpen) {
 			return setIsOpen(false);
 		}
-
+		
 		if (key === 'ArrowDown') {
-			if (focusedIndex === -1) {
+			if (focusedIndex === -1 || focusedIndex === items.length - 1) {
+				setCurrentListItemRef(target.firstElementChild);
+				
 				setFocusedItemId(items[0].id);
 				return setFocusedIndex(0);
 			}
 
-			const newIndex = focusedIndex === items.length - 1 ? 0 : focusedIndex + 1;
-			setFocusedItemId(items[newIndex].id);
+			const newIndex = focusedIndex + 1;
 
+			setCurrentListItemRef(target.children[newIndex]);
+			
+			setFocusedItemId(items[newIndex].id);
 			return setFocusedIndex(newIndex);
 		}
 
 		if (key === 'ArrowUp') {
-			if (focusedIndex === -1) {
+			if (focusedIndex === -1 || focusedIndex === 0) {
+				setCurrentListItemRef(target.lastElementChild);
+				
 				setFocusedItemId(items[items.length - 1].id);
 				return setFocusedIndex(items.length - 1);
 			}
 
-			const newIndex = focusedIndex === 0 ? items.length - 1 : focusedIndex - 1;
-
+			const newIndex = focusedIndex - 1;
+			
+			setCurrentListItemRef(target.children[newIndex]);
+			
 			setFocusedItemId(items[newIndex].id);
 			return setFocusedIndex(newIndex);
 		}
@@ -283,7 +336,7 @@ const Dropdown = (
 					onClick={handleDropdownClick}
 					onKeyUp={handleDropdownKeyUp}
 					onBlur={handleDropdownBlur}
-					ref={buttonRef}
+					ref={dropdownButtonRef}
 					className={dropdownButtonClasses}
 				>
 					<div className={classes.dropdown__buttonText}>
