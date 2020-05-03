@@ -12,6 +12,7 @@ const Modal = (
 	}
 ) => {
 	const modalFef = useRef(null);
+	const closeButtonFef = useRef(null);
 	const startTrapRef = useRef(null);
 	const endTrapRef = useRef(null);
 	const firstFocusableRef = useRef(null);
@@ -21,7 +22,7 @@ const Modal = (
 		const previousActiveElement = document.activeElement;
 		const focusableElements = getAllFocusableElements();
 		
-		initFirstLastFocusableElements(focusableElements)
+		initFirstLastContentFocusableElements(focusableElements)
 			.then((elements) => {
 				elements.firstElement.focus();
 			});
@@ -35,9 +36,12 @@ const Modal = (
 		return modalFef.current.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
 	};
 	
-	const initFirstLastFocusableElements = (focusableElements) => {
-		firstFocusableRef.current = focusableElements[1];
-		lastFocusableRef.current = focusableElements[focusableElements.length - 2];
+	const initFirstLastContentFocusableElements = (focusableElements) => {
+		const firstFocusableItemInContentIndex = 2; // Skip start trap and close button
+		const lastFocusableItemInContentIndex = focusableElements.length - 2; // Skip end trap
+		
+		firstFocusableRef.current = focusableElements[firstFocusableItemInContentIndex];
+		lastFocusableRef.current = focusableElements[lastFocusableItemInContentIndex];
 		
 		return Promise.resolve({
 			firstElement: firstFocusableRef.current,
@@ -53,7 +57,16 @@ const Modal = (
 		}
 		
 		if (target === endTrapRef.current) {
-			return firstFocusableRef.current.focus();
+			return closeButtonFef.current.focus();
+		}
+	};
+	
+	const handleModalKeyDown = (event) => {
+		event.stopPropagation();
+		const { key } = event;
+		
+		if (key === 'Escape') {
+			onClose();
 		}
 	};
 	
@@ -65,19 +78,20 @@ const Modal = (
 			aria-modal
 			aria-labelledby={ariaLabelledBy}
 			className="modal"
+			onKeyDown={handleModalKeyDown}
 			onFocus={handleModalElementsFocus}
 		>
 			{/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
 			<div tabIndex={0} ref={startTrapRef}> </div>
 			<div className="modalHeader">
 				<h2 id={ariaLabelledBy}>{title}</h2>
-				{/*<button*/}
-				{/*	type="button"*/}
-				{/*	onClick={onClose}*/}
-				{/*	onKeyDown={onClose}*/}
-				{/*>*/}
-				{/*	Close*/}
-				{/*</button>*/}
+				<button
+					type="button"
+					onClick={onClose}
+					ref={closeButtonFef}
+				>
+					Close
+				</button>
 			</div>
 			<div className="modalBody">
 				{children}

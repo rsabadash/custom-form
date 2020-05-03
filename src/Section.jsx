@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
 import { Modal } from './components/Modal';
 import { Field } from './components/Form';
-import { Input } from './components/AccessibleFormField';
+import { Dropdown, Input } from './components/AccessibleFormField';
 import { AccessibleForm } from './components/AccessibleForm';
+import { required } from './utilities/formValidators';
 
 const Section = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	
+	const dropdownItems = [
+		{
+			id: 34,
+			value: 'The Prestige'
+		},
+		{
+			id: 56,
+			value: 'Blade Runner 2049'
+		}
+	];
 	
 	const handleOpen = () => {
 		setIsModalOpen(true);
@@ -31,11 +43,7 @@ const Section = () => {
 					onSubmit={console.log}
 					formTitle="Enter data"
 					ariaLabelledBy="enterData"
-					initialValues={{
-						firstName: 'John',
-						agree: true,
-						// movieType: 'fantasy'
-					}}
+					initialValues={{}}
 				>
 					<Field
 						name="name"
@@ -43,9 +51,14 @@ const Section = () => {
 						component={Input}
 					/>
 					<Field
-						name="surname"
-						label="Surname"
-						component={Input}
+						required
+						placeholder="Select movie"
+						label="Movies"
+						items={dropdownItems}
+						name="movie"
+						multiSelect
+						component={Dropdown}
+						validate={[required()]}
 					/>
 					<input type="submit" value="Submit" />
 				</AccessibleForm>

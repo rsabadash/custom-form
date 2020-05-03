@@ -247,7 +247,7 @@ const Dropdown = (
 	};
 	
 	const handleListKeyDown = (event) => {
-		event.preventDefault();
+		event.stopPropagation();
 		const { key, target } = event;
 		
 		if ((key === 'Escape' || key === 'Tab') && isOpen) {
