@@ -37,15 +37,15 @@ const Dropdown = (
 		if (dropdownButtonRef.current && dropdownButtonRef.current.contains(event.target)) {
 			return;
 		}
-		
+
 		setIsOpen(false);
 	};
-	
+
 	useEffect(() => {
 		if (isOpen) {
 			document.addEventListener('click', handleOutsideDropdownClick);
 		}
-		
+
 		return () => {
 			if (isOpen) {
 				document.removeEventListener('click', handleOutsideDropdownClick);
@@ -54,7 +54,7 @@ const Dropdown = (
 	}, [
 		isOpen
 	]);
-	
+
 	useEffect(() => {
 		if (isKeyBoardNavigation) {
 			if (isOpen) {
@@ -79,11 +79,11 @@ const Dropdown = (
 				behavior: 'smooth',
 				block: 'end'
 			});
-			
+
 			resetCurrentListItemRef();
 		}
 	}, [focusedIndex]);
-	
+
 	const dropdownButtonClasses = classNames(
 		classes.dropdown__button,
 		dropdownButtonClass
@@ -109,11 +109,11 @@ const Dropdown = (
 	const setCurrentListItemRef = (element) => {
 		currentListItemRef.current = element;
 	};
-	
+
 	const resetCurrentListItemRef = () => {
 		currentListItemRef.current = null;
 	};
-	
+
 	const checkIsItemSelected = (id) => {
 		return !!selection.find((current) => current.id === id);
 	};
@@ -245,19 +245,20 @@ const Dropdown = (
 			initOnBlur();
 		}
 	};
-	
+
 	const handleListKeyDown = (event) => {
+		event.preventDefault();
 		event.stopPropagation();
 		const { key, target } = event;
-		
+
 		if ((key === 'Escape' || key === 'Tab') && isOpen) {
 			return setIsOpen(false);
 		}
-		
+
 		if (key === 'ArrowDown') {
 			if (focusedIndex === -1 || focusedIndex === items.length - 1) {
 				setCurrentListItemRef(target.firstElementChild);
-				
+
 				setFocusedItemId(items[0].id);
 				return setFocusedIndex(0);
 			}
@@ -265,7 +266,7 @@ const Dropdown = (
 			const newIndex = focusedIndex + 1;
 
 			setCurrentListItemRef(target.children[newIndex]);
-			
+
 			setFocusedItemId(items[newIndex].id);
 			return setFocusedIndex(newIndex);
 		}
@@ -273,15 +274,15 @@ const Dropdown = (
 		if (key === 'ArrowUp') {
 			if (focusedIndex === -1 || focusedIndex === 0) {
 				setCurrentListItemRef(target.lastElementChild);
-				
+
 				setFocusedItemId(items[items.length - 1].id);
 				return setFocusedIndex(items.length - 1);
 			}
 
 			const newIndex = focusedIndex - 1;
-			
+
 			setCurrentListItemRef(target.children[newIndex]);
-			
+
 			setFocusedItemId(items[newIndex].id);
 			return setFocusedIndex(newIndex);
 		}

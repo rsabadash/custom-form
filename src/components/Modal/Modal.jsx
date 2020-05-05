@@ -17,11 +17,11 @@ const Modal = (
 	const endTrapRef = useRef(null);
 	const firstFocusableRef = useRef(null);
 	const lastFocusableRef = useRef(null);
-	
+
 	useEffect(() => {
 		const previousActiveElement = document.activeElement;
 		const focusableElements = getAllFocusableElements();
-		
+
 		initFirstLastContentFocusableElements(focusableElements)
 			.then((elements) => {
 				elements.firstElement.focus();
@@ -31,46 +31,47 @@ const Modal = (
 			previousActiveElement.focus();
 		};
 	}, []);
-	
+
 	const getAllFocusableElements = () => {
 		return modalFef.current.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
 	};
-	
+
 	const initFirstLastContentFocusableElements = (focusableElements) => {
 		const firstFocusableItemInContentIndex = 2; // Skip start trap and close button
 		const lastFocusableItemInContentIndex = focusableElements.length - 2; // Skip end trap
-		
+
 		firstFocusableRef.current = focusableElements[firstFocusableItemInContentIndex];
 		lastFocusableRef.current = focusableElements[lastFocusableItemInContentIndex];
-		
+
 		return Promise.resolve({
 			firstElement: firstFocusableRef.current,
 			lastElement: lastFocusableRef.current
 		});
 	};
-	
+
 	const handleModalElementsFocus = (event) => {
 		const { target } = event;
-		
+
 		if (target === startTrapRef.current) {
 			return lastFocusableRef.current.focus();
 		}
-		
+
 		if (target === endTrapRef.current) {
 			return closeButtonFef.current.focus();
 		}
 	};
-	
+
 	const handleModalKeyDown = (event) => {
 		event.stopPropagation();
 		const { key } = event;
-		
+
 		if (key === 'Escape') {
 			onClose();
 		}
 	};
-	
+
 	return (
+		// eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
 		<div
 			id={id}
 			role="dialog"

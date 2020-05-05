@@ -3,7 +3,7 @@ import { isEmptyValue, isNullOrUndefined } from './utilities';
 export const required = (config = {}) => (value) => {
 	const { errorMessage } = config;
 	const message = isNullOrUndefined(errorMessage)
-		? 'Required'
+		? 'Required.'
 		: errorMessage;
 
 	let isValidValue = isEmptyValue(value);
