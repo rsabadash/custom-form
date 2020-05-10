@@ -1,4 +1,6 @@
-{
+const isTest = String(process.env.NODE_ENV) === 'test';
+
+module.exports = {
 	"presets": [
 		["@babel/preset-env",
 			{
@@ -7,7 +9,7 @@
 					"version": 3,
 					"proposals": true
 				},
-				"modules": false
+				"modules": isTest ? 'commonjs' : false
 			}
 		],
 		 "@babel/preset-react"
@@ -24,4 +26,4 @@
 			"useESModules": true
 		}]
 	]
-}
+};

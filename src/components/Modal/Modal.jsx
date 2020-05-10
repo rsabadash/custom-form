@@ -76,7 +76,7 @@ const Modal = (
 			id={id}
 			role="dialog"
 			ref={modalFef}
-			aria-modal
+			aria-modal={true}
 			aria-labelledby={ariaLabelledBy}
 			className="modal"
 			onKeyDown={handleModalKeyDown}

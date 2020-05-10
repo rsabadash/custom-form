@@ -8,7 +8,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+const isDevelopment = String(process.env.NODE_ENV) === 'development';
 
 const fileName = (extension) => isDevelopment ? `[name].${extension}` : `[name].[contenthash].${extension}`;
 const moduleIdsValue = isDevelopment ? 'named' : 'hashed';
@@ -84,6 +84,6 @@ module.exports = () => {
 				})
 			]
 		},
-		modeConfig(process.env.NODE_ENV)
+		modeConfig(String(process.env.NODE_ENV))
 	)
 };

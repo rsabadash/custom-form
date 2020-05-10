@@ -1,10 +1,13 @@
-import { isNullOrUndefined } from './utilities';
+import { isEmptyValue } from '../string';
 
 export const minLength = (config) => (value) => {
 	const { minLength, errorMessage } = config;
-	const message = isNullOrUndefined(errorMessage)
-		? `Field must contains at least ${config.minLength} characters.`
-		: errorMessage;
+	const placeholderRegex = /{minLength}/gi;
+	const trimmedValue = isEmptyValue(value) ? '' : value.trim();
 
-	return String(value).length < minLength ? message : null;
+	const message = isEmptyValue(errorMessage)
+		? `Field must contains at least ${config.minLength} characters.`
+		: errorMessage.replace(placeholderRegex, `${config.minLength}`);
+
+	return String(trimmedValue).length < minLength ? message : null;
 };
