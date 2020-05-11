@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Modal } from './components/Modal';
 import { Field } from './components/Form';
-import { RadioButton } from './components/RadioButton';
 import { Dropdown, Input } from './components/AccessibleFormField';
 import { AccessibleForm } from './components/AccessibleForm';
 import { required } from './utilities/formValidators';
@@ -30,14 +29,6 @@ const Section = () => {
 
 	return (
 		<>
-			<RadioButton
-				name="test"
-				value="test"
-				onChange={() => {
-					console.log('change test radio');
-				}}
-			/>
-
 			<button
 				type="button"
 				onClick={handleOpen}

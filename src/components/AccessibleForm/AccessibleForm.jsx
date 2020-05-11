@@ -1,5 +1,6 @@
 import React from 'react';
 import Form from '../Form';
+import { Heading } from '../Heading';
 
 const AccessibleForm = (
 	{
@@ -15,7 +16,12 @@ const AccessibleForm = (
 			role="form"
 			aria-labelledby={ariaLabelledBy}
 		>
-			<h2 id={ariaLabelledBy}>{formTitle}</h2>
+			<Heading
+				level={2}
+				id={ariaLabelledBy}
+			>
+				{formTitle}
+			</Heading>
 			<Form
 				onSubmit={onSubmit}
 				initialValues={initialValues}

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { Heading } from '../Heading';
 
 const Modal = (
 	{
@@ -85,7 +86,12 @@ const Modal = (
 			{/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
 			<div tabIndex={0} ref={startTrapRef}> </div>
 			<div className="modalHeader">
-				<h2 id={ariaLabelledBy}>{title}</h2>
+				<Heading
+					level={2}
+					id={ariaLabelledBy}
+				>
+					{title}
+				</Heading>
 				<button
 					type="button"
 					onClick={onClose}
