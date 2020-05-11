@@ -6,8 +6,8 @@ const TextField = (
 		type,
 		value,
 		onBlur,
-		invalid,
 		onChange,
+		invalid,
 		disabled,
 		required,
 		ariaLabel,
@@ -19,12 +19,12 @@ const TextField = (
 ) => {
 	const handleBlur = (event) => {
 		event.persist();
-		onBlur(event);
+		onBlur && onBlur(event);
 	};
 
 	const handleChange = (event) => {
 		event.persist();
-		onChange(event);
+		onChange && onChange(event);
 	};
 
 	return (
@@ -43,14 +43,16 @@ const TextField = (
 			aria-invalid={invalid} // if value invalid
 			aria-labelledby={ariaLabelledBy} // which element has label for input
 			aria-describedby={ariaDescribedBy} // which element describe input
-			autoComplete="off"
 			className={inputClassName}
+			autoComplete="off"
+			data-testid="textField"
 		/>
 	);
 };
 
 TextField.defaultProps = {
-	type: 'text'
+	type: 'text',
+	name: 'textField'
 };
 
 export { TextField };

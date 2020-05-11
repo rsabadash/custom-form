@@ -142,7 +142,7 @@ const TestForm = () => {
 			label: 'Fantasy'
 		}
 	];
-	
+
 	return (
 		<AccessibleForm
 			onSubmit={console.log}

@@ -23,7 +23,7 @@ module.exports = {
 				"version": 3,
 				"proposals": true
 			},
-			"useESModules": true
+			"useESModules": isTest ? 'auto' : true
 		}]
 	]
 };
