@@ -68,7 +68,6 @@ describe('Test basic TextField component', () => {
 		fireEvent.focus(textField);
 		fireEvent.change(textField, { target: { value: 'T' } });
 		fireEvent.change(textField, { target: { value: 'Te' } });
-
 		expect(handleOnChange).toHaveBeenCalledTimes(2);
 
 		fireEvent.blur(textField);

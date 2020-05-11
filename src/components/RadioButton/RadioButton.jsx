@@ -15,6 +15,16 @@ const RadioButton = (
 		radioButtonClass
 	}
 ) => {
+	const handleBlur = (event) => {
+		event.persist();
+		onBlur && onBlur(event);
+	};
+
+	const handleChange = (event) => {
+		event.persist();
+		onChange && onChange(event);
+	};
+
 	return (
 		<input
 			id={id}
@@ -23,14 +33,19 @@ const RadioButton = (
 			type="radio"
 			checked={checked}
 			disabled={disabled}
-			onBlur={onBlur}
-			onChange={onChange}
+			onBlur={handleBlur}
+			onChange={handleChange}
 			aria-label={ariaLabel} // if other description absent
 			aria-labelledby={ariaLabelledBy} // which element has label for input
 			aria-describedby={ariaDescribedBy} // which element describe input
 			className={radioButtonClass}
+			data-testid="radioButton"
 		/>
 	);
+};
+
+RadioButton.defaultProps = {
+	name: 'radioButton'
 };
 
 export { RadioButton };

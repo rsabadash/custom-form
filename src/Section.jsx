@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Modal } from './components/Modal';
 import { Field } from './components/Form';
+import { RadioButton } from './components/RadioButton';
 import { Dropdown, Input } from './components/AccessibleFormField';
 import { AccessibleForm } from './components/AccessibleForm';
 import { required } from './utilities/formValidators';
 
 const Section = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	
+
 	const dropdownItems = [
 		{
 			id: 34,
@@ -18,17 +19,25 @@ const Section = () => {
 			value: 'Blade Runner 2049'
 		}
 	];
-	
+
 	const handleOpen = () => {
 		setIsModalOpen(true);
 	};
-	
+
 	const handleClose = () => {
 		setIsModalOpen(false);
 	};
-	
+
 	return (
 		<>
+			<RadioButton
+				name="test"
+				value="test"
+				onChange={() => {
+					console.log('change test radio');
+				}}
+			/>
+
 			<button
 				type="button"
 				onClick={handleOpen}

@@ -1,4 +1,6 @@
 import React from 'react';
+import { Heading } from '../Heading';
+import { isEmptyValue } from '../../utilities/string';
 import classes from './styles/index.scss';
 // FIX REQUIRE AFTER FIRST BLUR ON RADIO BUTTON ELEMENT
 const RadioButtonGroup = (
@@ -9,39 +11,73 @@ const RadioButtonGroup = (
 		ariaDescribedBy,
 		radioGroupLabel,
 		radioGroupLabelId,
-		radioButtonComponent
+		radioGroupDescription,
+		radioGroupDescriptionId,
+		radioButtonComponent // check if it is a function and then describe it in test
 	}
 ) => {
-	const radioGroupLabelledBy = radioGroupLabelId !== ariaLabelledBy ? radioGroupLabelId : ariaLabelledBy;
+	const hasItems = items.length > 1;
+	const hasRadioGroupLabel = !isEmptyValue(radioGroupLabel);
+	const hasRadioGroupDescription = !isEmptyValue(radioGroupDescription);
+
+	const radioGroupLabelledBy = radioGroupLabelId !== ariaLabelledBy && hasRadioGroupLabel
+		? radioGroupLabelId
+		: ariaLabelledBy;
+
+	const radioGroupDescribedBy = radioGroupDescriptionId !== ariaDescribedBy && hasRadioGroupDescription
+		? radioGroupDescriptionId
+		: ariaDescribedBy;
 
 	return (
 		<div
 			role="radiogroup"
 			className={classes.radioButtonGroup}
 			aria-required={required}
-			aria-describedby={ariaDescribedBy} // which element describe input
+			aria-describedby={radioGroupDescribedBy} // which element describe input
 			aria-labelledby={radioGroupLabelledBy} // which element has label for radio group
 		>
-			<h2
-				id={radioGroupLabelId}
-				className={classes.radioButtonGroup__title}
-			>
-				{radioGroupLabel}
-			</h2>
-			<div className={classes.radioButtonGroup__radioButtonsContainer}>
-				{
-					items.map((item) => {
-						return (
-							<div
-								key={item.value}
-								className={classes.radioButtonGroup__radioButton}
-							>
-								{radioButtonComponent(item)}
-							</div>
-						);
-					})
-				}
-			</div>
+			{
+				hasRadioGroupLabel && (
+					<Heading
+						level={2}
+						id={radioGroupLabelId}
+						classNameHeading={classes.radioButtonGroup__title}
+						testId="radioGroupHeading"
+					>
+						{radioGroupLabel}
+					</Heading>
+				)
+			}
+			{
+				hasRadioGroupDescription && (
+					<p
+						id={radioGroupDescriptionId}
+						data-testid="radioGroupDescription"
+					>
+						{radioGroupDescription}
+					</p>
+				)
+			}
+			{
+				hasItems
+					? (
+						<div className={classes.radioButtonGroup__radioButtonsContainer}>
+							{
+								items.map((item) => {
+									return (
+										<div
+											key={item.value}
+											className={classes.radioButtonGroup__radioButton}
+										>
+											{radioButtonComponent(item)}
+										</div>
+									);
+								})
+							}
+						</div>
+					)
+					: <div>You have to pass at least two items.</div>
+			}
 		</div>
 	);
 };
