@@ -1,4 +1,5 @@
 import React from 'react';
+import { within } from '@testing-library/react';
 import { Portal } from '../Portal';
 import { renderWithWrapper } from '../../../utilities/renderWithWrapper';
 
@@ -57,13 +58,15 @@ describe('Test Portal component', () => {
 	it('Should render portal with content inside defined by passed class element', async () => {
 		const elementForPortal = initDOMElementForPortal();
 
-		const { getByTestId } = renderComponent({
+		renderComponent({
 			portalClassName: selectors.properClassNameForPortalContainer
 		});
 
+		const { getByTestId } = within(elementForPortal);
+
 		const portal = getByTestId(selectors.testIdPortalDefault);
 
-		expect(elementForPortal.contains(portal)).toBeTruthy();
+		expect(portal).toBeInTheDocument();
 	});
 
 	it('Should remove portal after unmount', () => {
@@ -78,7 +81,7 @@ describe('Test Portal component', () => {
 		expect(portal).not.toBeInTheDocument();
 	});
 
-	it('Should find by passed test id', () => {
+	it('Should render with passed test id', () => {
 		const { getByTestId } = renderComponent({
 			testId: selectors.testIdPortalCustom
 		});

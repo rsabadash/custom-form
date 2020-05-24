@@ -1,4 +1,5 @@
 import React from 'react';
+import { isEmptyValue } from '../../utilities/string';
 import classes from './styles/index.scss';
 
 type FieldErrorProps = {
@@ -14,6 +15,10 @@ const FieldError: React.FC<FieldErrorProps> = (
 		errorMessage
 	}
 ) => {
+	if (isEmptyValue(errorMessage)) {
+		throw new Error('Passed in FieldError component prop "errorMessage" should not be empty.');
+	}
+
 	return (
 		<div
 			id={id}

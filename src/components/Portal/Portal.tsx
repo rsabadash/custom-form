@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { isEmptyValue } from '../../utilities/string';
 
@@ -21,7 +21,7 @@ const Portal: React.FC<PortalProps> = (
 		? document.body
 		: document.querySelector(`.${portalClassName}`);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (portalElement) {
 			portalElement.appendChild(componentContainerElement);
 		} else {
