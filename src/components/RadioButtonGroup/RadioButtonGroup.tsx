@@ -2,7 +2,6 @@ import React from 'react';
 import { Heading } from '../Heading';
 import { isEmptyValue } from '../../utilities/string';
 import classes from './styles/index.scss';
-// FIX REQUIRE AFTER FIRST BLUR ON RADIO BUTTON ELEMENT
 
 type RadioButtonItem = {
 	value: string;

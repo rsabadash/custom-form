@@ -12,7 +12,6 @@ const AccessibleRadioButtonGroup = (
 		onChange,
 		required,
 		fieldData,
-
 		items,
 		label,
 		ariaLabelledBy,
@@ -46,7 +45,7 @@ const AccessibleRadioButtonGroup = (
 				}}
 			/>
 			{
-				error && (
+				error && isEmptyValue(value) && (
 					<FieldError
 						id={errorId}
 						errorMessage={error}
