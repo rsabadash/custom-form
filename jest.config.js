@@ -12,7 +12,7 @@ module.exports = {
 		'\\.css$': 'identity-obj-proxy',
 	},
 	setupFilesAfterEnv: ['@testing-library/jest-dom/extend-expect'],
-	collectCoverageFrom: ['**/src/**/*.{js,jsx}'],
+	collectCoverageFrom: ['**/src/**/*.{js,jsx}', '**/src/**/*.{ts,tsx}'],
 	testPathIgnorePatterns: [
 		'<rootDir>/dist/',
 		'<rootDir>/node_modules/',

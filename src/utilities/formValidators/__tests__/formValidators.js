@@ -47,6 +47,14 @@ describe('Test validators for form fields', () => {
 
 			expect(minLengthValidator('Test value')).toBeNull();
 		});
+
+		it('Should throw error if "minLength" will not pass', () => {
+			const minLengthValidator = minLength({
+				errorMessage: 'Enter not less than {minLength} characters, please.'
+			});
+
+			expect(() => minLengthValidator('Test value')).toThrowError('minLength is required option for minLength validator');
+		});
 	});
 
 	describe('Test "required" validator', () => {

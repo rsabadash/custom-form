@@ -12,7 +12,8 @@ module.exports = {
 				"modules": isTest ? 'commonjs' : false
 			}
 		],
-		 "@babel/preset-react"
+		"@babel/preset-react",
+		"@babel/preset-typescript"
 	],
 	"plugins": [
 		"@babel/plugin-syntax-dynamic-import",

@@ -1,12 +1,18 @@
 import { isEmptyValue } from '../string';
 import { isBoolean } from '../type';
 
-export const required = (config = {}) => (value) => {
+type Config = {
+	errorMessage?: string;
+}
+
+export const required = (config: Config = {}) => (value: CustomAnyType): string | null => {
 	const { errorMessage } = config;
 
-	const message = isEmptyValue(errorMessage)
-		? 'Required.'
-		: errorMessage;
+	let message = 'Required.';
+
+	if (errorMessage && !isEmptyValue(errorMessage)) {
+		message = errorMessage;
+	}
 
 	let isValidValue = isEmptyValue(value);
 

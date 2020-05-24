@@ -3,7 +3,26 @@ import { Heading } from '../Heading';
 import { isEmptyValue } from '../../utilities/string';
 import classes from './styles/index.scss';
 // FIX REQUIRE AFTER FIRST BLUR ON RADIO BUTTON ELEMENT
-const RadioButtonGroup = (
+
+type RadioButtonItem = {
+	value: string;
+	disabled?: boolean;
+	label: string;
+};
+
+type RadioButtonGroupProps = {
+	items: RadioButtonItem[],
+	required?: boolean,
+	ariaLabelledBy?: string;
+	ariaDescribedBy?: string;
+	radioGroupLabel?: string;
+	radioGroupLabelId?: string;
+	radioGroupDescription?: string;
+	radioGroupDescriptionId?: string;
+	radioButtonComponent: (item: RadioButtonItem) => JSX.Element // check if it is a function and then describe it in test
+};
+
+const RadioButtonGroup: React.FC<RadioButtonGroupProps> = (
 	{
 		items,
 		required,
@@ -44,6 +63,7 @@ const RadioButtonGroup = (
 						classNameHeading={classes.radioButtonGroup__title}
 						testId="radioGroupHeading"
 					>
+						{/*// @ts-ignore*/}
 						{radioGroupLabel}
 					</Heading>
 				)

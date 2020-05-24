@@ -4,7 +4,7 @@ import { Heading } from './components/Heading';
 import { TestForm } from './TestForm';
 import { Section } from './Section';
 
-const App = () => {
+const App: React.FC = () => {
 	return (
 		<>
 			<Heading level={1}>React form</Heading>

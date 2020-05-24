@@ -1,6 +1,20 @@
 import React from 'react';
 
-const RadioButton = (
+type RadioButtonProps = {
+	id: string;
+	name: string;
+	value: string;
+	onBlur?: React.FocusEventHandler;
+	onChange?: React.ChangeEventHandler;
+	checked: boolean;
+	disabled?: boolean;
+	ariaLabel?: string;
+	ariaLabelledBy?: string;
+	ariaDescribedBy?: string;
+	radioButtonClass?: string;
+};
+
+const RadioButton: React.FC<RadioButtonProps> = (
 	{
 		id,
 		name,
@@ -15,12 +29,12 @@ const RadioButton = (
 		radioButtonClass
 	}
 ) => {
-	const handleBlur = (event) => {
+	const handleBlur = (event: React.FocusEvent) => {
 		event.persist();
 		onBlur && onBlur(event);
 	};
 
-	const handleChange = (event) => {
+	const handleChange = (event: React.ChangeEvent) => {
 		event.persist();
 		onChange && onChange(event);
 	};

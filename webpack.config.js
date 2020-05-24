@@ -17,14 +17,14 @@ module.exports = () => {
 	return webpackMerge(
 		{
 			context: path.resolve(__dirname, 'src'),
-			entry: './index.js',
+			entry: './index.ts',
 			output: {
 				filename: fileName('js'),
 				chunkFilename: fileName('js'),
 				path: path.resolve(__dirname, 'dist')
 			},
 			resolve: {
-				extensions: ['.js', '.json', '.jsx']
+				extensions: ['.js', '.json', '.jsx', '.ts', '.tsx']
 			},
 			optimization: {
 				moduleIds: moduleIdsValue,
@@ -46,8 +46,8 @@ module.exports = () => {
 			module: {
 				rules: [
 					{
-						test: /\.(js|jsx)$/,
-						exclude: [/node_modules/, /webpack/],
+						test: /\.(ts|js)x?$/,
+						exclude: [/node_modules/, /coverage/, /webpack/],
 						use: [
 							{
 								loader: 'babel-loader'

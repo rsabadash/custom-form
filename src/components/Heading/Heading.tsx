@@ -9,7 +9,15 @@ const headingLevelEnum = {
 	6: 'h6'
 };
 
-const Heading = (
+type HeadingProps = {
+	id?: string;
+	level: number;
+	testId?: string;
+	children: string;
+	classNameHeading?: string;
+};
+
+const Heading: React.FC<HeadingProps> = (
 	{
 		id,
 		level,
