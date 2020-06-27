@@ -1,6 +1,11 @@
-$accessible-focus-color: #51cbee;
+$accessible-focus-color: #72c3fc;
 
 @mixin accessibleFocus {
-	box-shadow: 0 0 5px $accessible-focus-color;
-	border: 1px solid $accessible-focus-color;
+	//box-shadow: 0 0 5px $accessible-focus-color;
+	//border: 1px solid $accessible-focus-color;
+
+	border: 1px solid #72c3fc;
+	border-radius: 2px;
+	outline: none;
+	box-shadow: 1px 1px 0 #72c3fc, -1px -1px 0 #72c3fc, -1px 1px 0 #72c3fc, 1px -1px 0 #72c3fc;
 }

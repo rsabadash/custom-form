@@ -24,9 +24,9 @@ export const validateField = (rules, values, fieldName) => {
 
 export const validateAllFields = async (rules, values) => {
 	const errors = {};
-	const fieldNames = Object.keys(values);
+	const fieldNamesForValidation = Object.keys(rules);
 
-	for (const name of fieldNames) {
+	for (const name of fieldNamesForValidation) {
 		const result = await validateField(rules, values, name);
 
 		if (!isEmptyValue(result.errorMessage)) {

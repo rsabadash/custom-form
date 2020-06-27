@@ -3,23 +3,11 @@ import classes from './styles/index.scss';
 
 const Overlay = (
 	{
-		children,
-		// handleCloseContent
+		children
 	}
 ) => {
-	// const handleClick = () => {
-	// 	handleCloseContent();
-	// };
-	//
-	// const handleKeyDown = (event) => {
-	// 	const { key } = event;
-	//
-	// 	if ((key === 'Escape')) {
-	// 		handleCloseContent();
-	// 	}
-	// };
-	
 	return (
+		// eslint-disable-next-line jsx-a11y/no-static-element-interactions,jsx-a11y/click-events-have-key-events
 		<div className={classes.overlay}>
 			{children}
 		</div>

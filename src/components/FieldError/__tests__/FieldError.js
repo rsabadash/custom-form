@@ -52,10 +52,10 @@ describe('Test FieldError component', () => {
 	});
 
 	it('Should throw error if "errorMessage" prop is empty', () => {
-		jest.spyOn(console, 'error').mockImplementation(() => null);
+		const spyError = jest.spyOn(console, 'error').mockImplementation(() => null);
 
 		expect(() => renderComponent({})).toThrowError('Passed in FieldError component prop "errorMessage" should not be empty.');
 
-		console.error.mockRestore();
+		spyError.mockRestore();
 	});
 });

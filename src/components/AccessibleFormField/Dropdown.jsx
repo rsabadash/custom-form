@@ -23,7 +23,7 @@ const AccessibleDropdown = (
 		ariaLabelledBy,
 	}
 ) => {
-	const { error } = fieldData;
+	const { value, error } = fieldData;
 	const errorId = isEmptyValue(error) ? '' : `${name}Error`;
 	const labelledBy = isEmptyValue(ariaLabelledBy) ? name : ariaLabelledBy;
 	const idForLabel = isEmptyValue(labelId) ? labelledBy : labelId;
@@ -39,6 +39,7 @@ const AccessibleDropdown = (
 			</Label>
 			<Dropdown
 				name={name}
+				value={value}
 				items={items}
 				onBlur={onBlur}
 				onChange={onChange}

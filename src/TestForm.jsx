@@ -151,6 +151,7 @@ const TestForm = () => {
 			initialValues={{
 				firstName: 'John',
 				agree: true,
+				movie: [148]
 				// movieType: 'fantasy'
 			}}
 		>

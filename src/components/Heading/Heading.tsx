@@ -1,4 +1,6 @@
 import React from 'react';
+import classNames from 'classnames';
+import classes from './styles/index.scss';
 
 const headingLevelEnum = {
 	1: 'h1',
@@ -26,13 +28,18 @@ const Heading: React.FC<HeadingProps> = (
 		classNameHeading
 	}
 ) => {
+	const headingClasses = classNames(
+		classes.heading,
+		classNameHeading
+	);
+
 	const TagName = headingLevelEnum[level];
 
 	return (
 		<TagName
 			id={id}
 			data-testid={testId}
-			className={classNameHeading}
+			className={headingClasses}
 		>
 			{ children }
 		</TagName>

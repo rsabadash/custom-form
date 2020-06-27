@@ -1,10 +1,13 @@
 import React, { useRef, useEffect } from 'react';
 import { Heading } from '../Heading';
+import classes from './styles/index.scss';
+import { useOutsideElementClick } from '../../hooks/useOutsideElementClick';
 
 const Modal = (
 	{
 		id,
 		title,
+		isOpen,
 		children,
 		onClose,
 		onConfirm,
@@ -18,6 +21,16 @@ const Modal = (
 	const endTrapRef = useRef(null);
 	const firstFocusableRef = useRef(null);
 	const lastFocusableRef = useRef(null);
+
+	const handleOutsideModalClick = () => {
+		onClose();
+	};
+
+	useOutsideElementClick({
+		element: modalFef.current,
+		dependency: isOpen,
+		handleClick: handleOutsideModalClick
+	});
 
 	useEffect(() => {
 		const previousActiveElement = document.activeElement;
@@ -79,28 +92,30 @@ const Modal = (
 			ref={modalFef}
 			aria-modal={true}
 			aria-labelledby={ariaLabelledBy}
-			className="modal"
+			className={classes.modal}
 			onKeyDown={handleModalKeyDown}
 			onFocus={handleModalElementsFocus}
 		>
 			{/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
 			<div tabIndex={0} ref={startTrapRef}> </div>
-			<div className="modalHeader">
+			<div className={classes.modalHeader}>
 				<Heading
 					level={2}
 					id={ariaLabelledBy}
 				>
 					{title}
 				</Heading>
-				<button
-					type="button"
-					onClick={onClose}
-					ref={closeButtonFef}
-				>
-					Close
-				</button>
+				<div className={classes.modalHeaderControlButtons}>
+					<button
+						type="button"
+						onClick={onClose}
+						ref={closeButtonFef}
+					>
+						Close
+					</button>
+				</div>
 			</div>
-			<div className="modalBody">
+			<div className={classes.modalBody}>
 				{children}
 			</div>
 			<div className="modalFooter">

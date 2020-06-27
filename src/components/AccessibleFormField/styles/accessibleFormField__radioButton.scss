@@ -29,6 +29,7 @@
 
 .accessibleFormField__radioButton:focus + .accessibleFormField__label::before {
 	@include accessibleFocus;
+	border-radius: 50%;
 }
 
 .accessibleFormField__radioButton + .accessibleFormField__label::after {

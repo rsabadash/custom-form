@@ -1,0 +1,11 @@
+.modal {
+	width: 95vw;
+	height: 90vh;
+	max-height: 700px;
+	max-width: 600px;
+	border-radius: 5px;
+	background-color: #ffffff;
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+}

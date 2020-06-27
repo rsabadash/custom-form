@@ -10,6 +10,7 @@ const ModalContainer = (
 		children,
 		onClose,
 		onConfirm,
+		ariaLabelledBy,
 		footerComponent
 	}
 ) => {
@@ -21,8 +22,10 @@ const ModalContainer = (
 						<Overlay>
 							<Modal
 								title={title}
+								isOpen={isOpen}
 								onClose={onClose}
 								onConfirm={onConfirm}
+								ariaLabelledBy={ariaLabelledBy}
 								footerComponent={footerComponent}
 							>
 								{children}

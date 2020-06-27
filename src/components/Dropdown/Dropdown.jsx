@@ -2,8 +2,8 @@ import React, { useRef, useMemo, useState, useEffect, useLayoutEffect } from 're
 import classNames from 'classnames';
 import { isEmptyValue } from '../../utilities/string';
 import classes from './styles/dropdown.scss';
+import { useOutsideElementClick } from '../../hooks/useOutsideElementClick';
 // ADD POSSIBILITY FOR INITIAL STATE
-// const visibleItems = 7;
 
 const Dropdown = (
 	{
@@ -33,27 +33,15 @@ const Dropdown = (
 	const [focusedItemId, setFocusedItemId] = useState(null);
 	const [isKeyBoardNavigation, setIsKeyBoardNavigation] = useState(false);
 
-	const handleOutsideDropdownClick = (event) => {
-		if (dropdownButtonRef.current && dropdownButtonRef.current.contains(event.target)) {
-			return;
-		}
-
+	const handleOutsideDropdownClick = () => {
 		setIsOpen(false);
 	};
 
-	useEffect(() => {
-		if (isOpen) {
-			document.addEventListener('click', handleOutsideDropdownClick);
-		}
-
-		return () => {
-			if (isOpen) {
-				document.removeEventListener('click', handleOutsideDropdownClick);
-			}
-		};
-	}, [
-		isOpen
-	]);
+	useOutsideElementClick({
+		element: dropdownButtonRef.current,
+		dependency: isOpen,
+		handleClick: handleOutsideDropdownClick
+	});
 
 	useEffect(() => {
 		if (isKeyBoardNavigation) {
@@ -122,7 +110,7 @@ const Dropdown = (
 		return selection.filter((current) => current.id !== id);
 	};
 
-	const getMultipleValue = (selectedItems ) => {
+	const getMultipleValue = (selectedItems) => {
 		return selectedItems.reduce((acc, item, index) => {
 			if (index === 0) {
 				acc = `${item.value}`;
@@ -165,10 +153,8 @@ const Dropdown = (
 		if (!isItemAlreadySelected) {
 			if (multiSelect) {
 				updatedSelection = [...selection, item];
-				setSelection([...selection, item]);
 			} else {
 				updatedSelection = [item];
-				setSelection([item]);
 			}
 		}
 

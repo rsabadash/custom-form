@@ -35,8 +35,11 @@ const Section = () => {
 			>
 				Open modal
 			</button>
+
 			<Modal
 				isOpen={isModalOpen}
+				ariaLabelledBy="testModal"
+				title="Confirm movie"
 				onClose={handleClose}
 			>
 				<AccessibleForm
