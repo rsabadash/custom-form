@@ -15,7 +15,6 @@ type HeadingProps = {
 	id?: string;
 	level: number;
 	testId?: string;
-	children: string;
 	classNameHeading?: string;
 };
 

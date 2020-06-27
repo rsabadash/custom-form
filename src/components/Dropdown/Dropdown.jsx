@@ -37,8 +37,7 @@ const Dropdown = (
 		setIsOpen(false);
 	};
 
-	useOutsideElementClick({
-		element: dropdownButtonRef.current,
+	const { setCurrentElement } = useOutsideElementClick({
 		dependency: isOpen,
 		handleClick: handleOutsideDropdownClick
 	});
@@ -60,6 +59,12 @@ const Dropdown = (
 			};
 		}
 	}, [isOpen, isKeyBoardNavigation]);
+
+	useEffect(() => {
+		if (dropdownButtonRef.current) {
+			setCurrentElement(dropdownButtonRef.current);
+		}
+	}, [setCurrentElement]);
 
 	useLayoutEffect(() => {
 		if (currentListItemRef.current) {
@@ -314,6 +319,7 @@ const Dropdown = (
 				<button
 					type="button"
 					aria-haspopup="listbox"
+					// aria-required={required}
 					disabled={disabled}
 					aria-label={ariaLabel} // if other description absent
 					aria-labelledby={ariaLabelledBy} // which element has label for input

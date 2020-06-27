@@ -1,17 +1,14 @@
 import React from 'react';
 import { Portal } from '../Portal';
-import { Modal } from './Modal';
+import { ModalContainer } from './ModalContainer';
 import { Overlay } from '../Overlay';
 
-const ModalContainer = (
+const Modal = (
 	{
-		title,
 		isOpen,
 		children,
 		onClose,
-		onConfirm,
 		ariaLabelledBy,
-		footerComponent
 	}
 ) => {
 	return (
@@ -20,16 +17,13 @@ const ModalContainer = (
 				isOpen && (
 					<Portal>
 						<Overlay>
-							<Modal
-								title={title}
+							<ModalContainer
 								isOpen={isOpen}
 								onClose={onClose}
-								onConfirm={onConfirm}
 								ariaLabelledBy={ariaLabelledBy}
-								footerComponent={footerComponent}
 							>
 								{children}
-							</Modal>
+							</ModalContainer>
 						</Overlay>
 					</Portal>
 				)
@@ -38,4 +32,4 @@ const ModalContainer = (
 	);
 };
 
-export { ModalContainer };
+export { Modal };

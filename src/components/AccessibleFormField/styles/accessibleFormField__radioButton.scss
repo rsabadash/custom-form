@@ -1,6 +1,3 @@
-@import "accessibleMixins";
-@import "../../../variables";
-
 .accessibleFormField__radioButton {
 	margin: 0;
 }
@@ -28,8 +25,8 @@
 }
 
 .accessibleFormField__radioButton:focus + .accessibleFormField__label::before {
-	@include accessibleFocus;
-	border-radius: 50%;
+	@extend .focusElement;
+	border-radius: 50%!important;
 }
 
 .accessibleFormField__radioButton + .accessibleFormField__label::after {
@@ -41,7 +38,7 @@
 	border-radius: 50%;
 	width: 16px;
 	height: 16px;
-	background: $font-color;
+	background: $fontColor;
 	opacity: 0;
 }
 

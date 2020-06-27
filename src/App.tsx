@@ -9,6 +9,7 @@ const App: React.FC = () => {
 		<>
 			<Heading level={1}>React form</Heading>
 			<TestForm />
+			<Heading level={2}>React modal</Heading>
 			<Section />
 		</>
 	);

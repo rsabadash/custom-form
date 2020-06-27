@@ -1,0 +1,37 @@
+$buttonMainColor: #2551a8;
+$buttonSecondaryColor: #e8f7ff;
+
+.button {
+	border: 1px solid $buttonMainColor;
+	background-color: $buttonMainColor;
+	padding: 0;
+	max-width: 250px;
+	border-radius: 5px;
+	cursor: pointer;
+	word-break: break-word;
+	font-weight: bold;
+	color: #ffffff;
+	transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.button_secondary {
+	border: 1px solid $buttonSecondaryColor;
+	background-color: $buttonSecondaryColor;
+	font-weight: bold;
+	color: $buttonMainColor;
+}
+
+.button_ghost {
+	border: 1px solid #ced4da;
+	background-color: #ffffff;
+	color: $fontColor;
+}
+
+.button:focus {
+	@extend .focusElement;
+	border-radius: 5px!important;
+}
+
+.button__inner {
+	padding: 10px 30px;
+}

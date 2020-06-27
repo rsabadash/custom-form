@@ -1,20 +1,29 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import { isFunction } from '../utilities/type';
 
 type UseOutsideElementClickProps = {
-	element: null | HTMLElement;
 	dependency: boolean;
 	handleClick: () => void;
-}
+};
 
-export const useOutsideElementClick = ({ element, dependency, handleClick }: UseOutsideElementClickProps): void => {
+type ReturnType = {
+	setCurrentElement: (element: null | HTMLElement) => void;
+};
+
+export const useOutsideElementClick = ({ dependency, handleClick }: UseOutsideElementClickProps): ReturnType => {
+	const currentElement = useRef<null | HTMLElement>(null);
+
+	const setCurrentElement = useCallback((element: null | HTMLElement) => {
+		currentElement.current = element;
+	}, []);
+
 	const handleOutsideClick = useCallback((event: MouseEvent): void => {
-		if (!element || !(event.target instanceof Node)) {
-			console.warn('Passed element is not an element.');
+		if (!currentElement.current || !(currentElement.current instanceof Node)) {
+			console.warn('Passed element is not a Node.');
 			return;
 		}
 
-		if (element.contains(event.target)) {
+		if (event.target instanceof Node && currentElement.current.contains(event.target)) {
 			return;
 		}
 
@@ -24,10 +33,7 @@ export const useOutsideElementClick = ({ element, dependency, handleClick }: Use
 		}
 
 		handleClick();
-	}, [
-		element,
-		handleClick
-	]);
+	}, [handleClick]);
 
 	useEffect(() => {
 		if (dependency) {
@@ -43,4 +49,8 @@ export const useOutsideElementClick = ({ element, dependency, handleClick }: Use
 		dependency,
 		handleOutsideClick
 	]);
+
+	return {
+		setCurrentElement
+	};
 };

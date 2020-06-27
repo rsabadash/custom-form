@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Field } from './components/Form';
+import { Button } from './components/Button';
 import { Input, Dropdown, Checkbox, RadioButtonGroup } from './components/AccessibleFormField';
 import { AccessibleForm } from './components/AccessibleForm';
 import { required, minLength } from './utilities/formValidators';
@@ -151,7 +152,7 @@ const TestForm = () => {
 			initialValues={{
 				firstName: 'John',
 				agree: true,
-				movie: [148]
+				// movie: [148]
 				// movieType: 'fantasy'
 			}}
 		>
@@ -196,7 +197,11 @@ const TestForm = () => {
 				component={RadioButtonGroup}
 				validate={[required()]}
 			/>
-			<input type="submit" value="Submit" />
+			<Button
+				type="submit"
+			>
+				Submit
+			</Button>
 		</AccessibleForm>
 	);
 };

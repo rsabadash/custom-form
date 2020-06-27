@@ -3,7 +3,7 @@ import { fireEvent } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 
 const initHook = (props) => {
-	renderHook(useOutsideElementClick, {
+	return renderHook(useOutsideElementClick, {
 		initialProps: props
 	});
 };
@@ -17,11 +17,11 @@ describe('Test useOutsideElementClick hook', () => {
 	});
 
 	it('Should call callback function if dependency is truthy and click was on the document', () => {
-		initHook({
-			element: element,
+		const { result } = initHook({
 			dependency: true,
 			handleClick: handleOutsideClickMock
 		});
+		result.current.setCurrentElement(element);
 
 		fireEvent.click(document);
 
@@ -29,11 +29,11 @@ describe('Test useOutsideElementClick hook', () => {
 	});
 
 	it('Should not call callback function if click was on the element', () => {
-		initHook({
-			element: element,
+		const { result } = initHook({
 			dependency: true,
 			handleClick: handleOutsideClickMock
 		});
+		result.current.setCurrentElement(element);
 
 		fireEvent.click(element);
 
@@ -41,11 +41,11 @@ describe('Test useOutsideElementClick hook', () => {
 	});
 
 	it('Should not call callback function if dependency is falsy and click was on the document', () => {
-		initHook({
-			element: element,
+		const { result } = initHook({
 			dependency: false,
 			handleClick: handleOutsideClickMock
 		});
+		result.current.setCurrentElement(element);
 
 		fireEvent.click(document);
 
@@ -55,11 +55,11 @@ describe('Test useOutsideElementClick hook', () => {
 	it('Should throw warning in console if passed inappropriate element', () => {
 		const spyWarn = jest.spyOn(console, 'warn').mockImplementation(() => null);
 
-		initHook({
-			element: null,
+		const { result } = initHook({
 			dependency: true,
 			handleClick: handleOutsideClickMock
 		});
+		result.current.setCurrentElement(null);
 
 		fireEvent.click(document);
 
@@ -72,11 +72,11 @@ describe('Test useOutsideElementClick hook', () => {
 	it('Should throw warning in console if callback function was not passed', () => {
 		const spyWarn = jest.spyOn(console, 'warn').mockImplementation(() => null);
 
-		initHook({
-			element: null,
+		const { result } = initHook({
 			dependency: true,
 			handleClick: undefined
 		});
+		result.current.setCurrentElement(null);
 
 		fireEvent.click(document);
 

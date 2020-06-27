@@ -1,7 +1,7 @@
-@import "./variables";
+@import "./variables.scss";
 
 body {
 	font-family: Arial, 'sans-serif';
-	color: $font-color;
+	color: $fontColor;
 	margin: 0 20px;
 }

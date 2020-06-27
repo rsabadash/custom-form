@@ -1,4 +1,4 @@
-@import "../../../variables";
+@import "../../../styles/variables";
 
 .dropdown {
 	position: relative;
@@ -12,7 +12,7 @@
 	width: 100%;
 	padding: 8px 12px;
 	font-size: 14px;
-	color: $font-color;
+	color: $fontColor;
 	background-color: #ffffff;
 	border-radius: 2px;
 	border: 1px solid #ced4da;
@@ -28,7 +28,7 @@
 	padding: 8px 0;
 	margin: 0;
 	font-size: 14px;
-	color: $font-color;
+	color: $fontColor;
 	background-color: #ffffff;
 	border-radius: 2px;
 	border: 1px solid #ced4da;
