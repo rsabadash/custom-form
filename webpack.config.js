@@ -17,7 +17,7 @@ module.exports = () => {
 	return webpackMerge(
 		{
 			context: path.resolve(__dirname, 'src'),
-			entry: './index.ts',
+			entry: './index.tsx',
 			output: {
 				filename: fileName('js'),
 				chunkFilename: fileName('js'),

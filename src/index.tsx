@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './styles/main.scss';
 
 import { App } from './App';
+import { InternationalizationProvider } from './components/Internationalization';
 
 if (String(process.env.NODE_ENV) !== 'production') {
 	// eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -11,6 +12,8 @@ if (String(process.env.NODE_ENV) !== 'production') {
 }
 
 ReactDOM.render(
-	React.createElement(App),
+	<InternationalizationProvider>
+		<App/>
+	</InternationalizationProvider>,
 	document.querySelector('#root')
 );

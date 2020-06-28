@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+
 import { Modal, ModalContent, ModalHeader, ModalFooter } from './components/Modal';
 import { Field } from './components/Form';
 import { Button } from './components/Button';
 import { Dropdown, Input } from './components/AccessibleFormField';
 import { AccessibleForm } from './components/AccessibleForm';
 import { required } from './utilities/formValidators';
+import { useTranslationAPI } from './components/Internationalization/const';
 
 const Section = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const { translate } = useTranslationAPI();
 
 	const dropdownItems = [
 		{
@@ -36,7 +39,7 @@ const Section = () => {
 				ariaExpanded={isModalOpen}
 				handleClick={handleOpen}
 			>
-				Open
+				{translate('common.open')}
 			</Button>
 
 			<Modal
