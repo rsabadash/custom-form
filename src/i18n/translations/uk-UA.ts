@@ -1,10 +1,13 @@
-import { LOCALES } from '../locales';
+import languages from './languages';
 
 export default {
-	[LOCALES['uk-UA']]: {
+	['uk-UA']: {
+		...languages,
 		common: {
 			chooseLanguage: 'Оберіть мову',
-			open: 'Відкрити'
+			open: 'Відкрити',
+			homePage: 'Головна',
+			newsPage: 'Новини'
 		}
 	}
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { App } from '../../App';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useTranslationState } from '../Internationalization/const';
@@ -17,12 +17,19 @@ const Routes = () => {
 		<BrowserRouter>
 			<LanguageSwitcher />
 
-			<Route exact path={`${languageUrlPrefix}`}>
-				<App />
-			</Route>
-			<Route path={`${languageUrlPrefix}/news`}>
-				<NewsFeed />
-			</Route>
+			<Switch>
+				{
+					languageUrlPrefix !== '' && (
+						<Redirect exact from="/" to={languageUrlPrefix} />
+					)
+				}
+				<Route path={`${languageUrlPrefix}/news`}>
+					<NewsFeed />
+				</Route>
+				<Route exact path={`${languageUrlPrefix}`}>
+					<App />
+				</Route>
+			</Switch>
 		</BrowserRouter>
 	);
 };

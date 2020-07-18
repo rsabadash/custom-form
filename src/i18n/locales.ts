@@ -1,14 +1,11 @@
-import { LocalesType } from './types';
+import { LanguagesType } from './types';
 
 export const SUPPORTED_LANGUAGES = {
 	en: 'en',
 	ua: 'ua'
 };
 
-export const LOCALES: LocalesType = {
-	['en-US']: 'en-US',
-	['uk-UA']: 'uk-UA'
-};
+export const LOCALES: Array<LanguagesType> = ['en-US', 'uk-UA'];
 
 export enum LocalesLanguageEnum {
 	'en-US' = 'en',

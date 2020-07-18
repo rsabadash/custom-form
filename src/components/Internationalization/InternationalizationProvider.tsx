@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import translations from '../../i18n/translations';
@@ -17,6 +17,10 @@ const InternationalizationProvider: React.FC<InternationalizationProviderProps> 
 	}
 ) => {
 	const [locale, setLocale] = useState<LanguagesType>(userLocale);
+
+	useEffect(() => {
+		document?.querySelector('html')?.setAttribute('lang', locale);
+	}, [locale]);
 
 	const changeLanguage = useCallback((locale) => {
 		setLocale(locale);

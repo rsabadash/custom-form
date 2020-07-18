@@ -1,10 +1,13 @@
-import { LOCALES } from '../locales';
+import languages from './languages';
 
 export default {
-	[LOCALES['en-US']]: {
+	['en-US']: {
+		...languages,
 		common: {
 			chooseLanguage: 'Choose language',
-			open: 'Open'
+			open: 'Open',
+			homePage: 'Home',
+			newsPage: 'News'
 		}
 	}
 };

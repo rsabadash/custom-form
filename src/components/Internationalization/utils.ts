@@ -1,4 +1,4 @@
-import { LOCALES } from '../../i18n/locales';
+import { LocalesLanguageEnum } from '../../i18n/locales';
 import { LanguagesType } from '../../i18n/types';
 import { localStorageManager } from '../../utilities/localStorageManager';
 import { LOCAL_STORAGE_LOCALE_KEY, DEFAULT_LOCALE } from './const';
@@ -27,7 +27,7 @@ export const defineUserLocale = (defaultLocale?: string): LanguagesType => {
 		locale = (navigator.languages && navigator.languages[0]) || navigator.language;
 	}
 
-	const isLanguageSupported = LOCALES[locale];
+	const isLanguageSupported = LocalesLanguageEnum[locale];
 
 	if (!isLanguageSupported) {
 		locale = defaultLocale || DEFAULT_LOCALE;
