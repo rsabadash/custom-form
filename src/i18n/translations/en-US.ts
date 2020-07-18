@@ -1,7 +1,7 @@
 import { LOCALES } from '../locales';
 
 export default {
-	[LOCALES.en]: {
+	[LOCALES['en-US']]: {
 		common: {
 			chooseLanguage: 'Choose language',
 			open: 'Open'

@@ -9,6 +9,7 @@ module.exports = () => {
 			stats: {
 				colors: true
 			},
+			historyApiFallback: true // will redirect 404s to /index.html
 			// writeToDisk: true
 		},
 		devtool: 'cheap-module-source-map',

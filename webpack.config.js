@@ -21,7 +21,8 @@ module.exports = () => {
 			output: {
 				filename: fileName('js'),
 				chunkFilename: fileName('js'),
-				path: path.resolve(__dirname, 'dist')
+				path: path.resolve(__dirname, 'dist'),
+				publicPath: '/'
 			},
 			resolve: {
 				extensions: ['.js', '.json', '.jsx', '.ts', '.tsx']

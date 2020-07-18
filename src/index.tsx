@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/main.scss';
 
-import { App } from './App';
+import { Routes } from './components/Routes';
 import { InternationalizationProvider } from './components/Internationalization';
 
 if (String(process.env.NODE_ENV) !== 'production') {
@@ -13,7 +13,7 @@ if (String(process.env.NODE_ENV) !== 'production') {
 
 ReactDOM.render(
 	<InternationalizationProvider>
-		<App/>
+		<Routes/>
 	</InternationalizationProvider>,
 	document.querySelector('#root')
 );

@@ -1,15 +1,39 @@
 import React from 'react';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
-import { LOCALES, LanguagesType } from '../../i18n/locales';
-import { useTranslationAPI } from '../Internationalization/const';
+import { LanguagesType } from '../../i18n/types';
+import { LOCALES, LocalesLanguageEnum, SUPPORTED_LANGUAGES } from '../../i18n/locales';
+import { DEFAULT_LOCALE, useTranslationAPI, useTranslationState } from '../Internationalization/const';
 import { Button } from '../Button';
 import { Heading } from '../Heading';
 
 const LanguageSwitcher: React.FC = () => {
-	const { translate, setLanguage } = useTranslationAPI();
+	const { translate, changeLanguage } = useTranslationAPI();
+	const { languageUrlPrefix } = useTranslationState();
+	const { push } = useHistory();
+	const { pathname } = useLocation();
 
 	const handleClick = (locale: LanguagesType): void => {
-		setLanguage(locale);
+		const newLanguageBasedOnLocale = LocalesLanguageEnum[locale];
+		const newLanguageUrlPrefix = locale === DEFAULT_LOCALE ? '/' : `/${newLanguageBasedOnLocale}`;
+		const currentLanguageUrlPrefix = pathname.split('/')[1] || '/';
+
+		if (currentLanguageUrlPrefix !== newLanguageUrlPrefix) {
+			const isNewUrlPrefixSlash = newLanguageUrlPrefix === '/';
+			const isCurrentUrlPrefixLanguage = SUPPORTED_LANGUAGES[currentLanguageUrlPrefix];
+
+			if (isNewUrlPrefixSlash && isCurrentUrlPrefixLanguage) {
+				const newPath = pathname.replace(`/${currentLanguageUrlPrefix}`, '');
+				changeLanguage(locale);
+				return push(newPath);
+			}
+
+			if (!isNewUrlPrefixSlash && !isCurrentUrlPrefixLanguage && newLanguageBasedOnLocale) {
+				const newPath = pathname === '/' ? newLanguageUrlPrefix : `${newLanguageUrlPrefix}${pathname}`;
+				changeLanguage(locale);
+				return push(newPath);
+			}
+		}
 	};
 
 	return (
@@ -24,11 +48,13 @@ const LanguageSwitcher: React.FC = () => {
 							key={locale}
 							handleClick={() => handleClick(LOCALES[locale])}
 						>
-							{locale}
+							{LocalesLanguageEnum[locale]}
 						</Button>
 					);
 				})
 			}
+			<Link to={`${languageUrlPrefix}`}>Home</Link>
+			<Link to={`${languageUrlPrefix}/news`}>News</Link>
 		</>
 	);
 };

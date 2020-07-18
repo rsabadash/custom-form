@@ -23,6 +23,16 @@ const Field = (
 	useEffect(() => {
 		registerField(props.name);
 
+		return () => {
+			unregisterField(props.name);
+		};
+	}, [
+		props.name,
+		registerField,
+		unregisterField
+	]);
+
+	useEffect(() => {
 		if (props.validate) {
 			registerFieldValidation(props.name, {
 				validate: props.validate,
@@ -30,8 +40,6 @@ const Field = (
 		}
 
 		return () => {
-			unregisterField(props.name);
-
 			if (props.validate) {
 				unregisterFieldValidation(props.name);
 			}
@@ -39,8 +47,6 @@ const Field = (
 	}, [
 		props.name,
 		props.validate,
-		registerField,
-		unregisterField,
 		registerFieldValidation,
 		unregisterFieldValidation
 	]);

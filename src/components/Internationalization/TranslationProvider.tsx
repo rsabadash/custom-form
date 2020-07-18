@@ -1,15 +1,28 @@
 import React, { useMemo, useCallback } from 'react';
 import { useIntl } from 'react-intl';
 
-import { TranslationProviderProps, TranslationContextAPI, TranslationContextAPIProps } from './const';
+import {
+	TranslationProviderProps,
+	TranslationContextAPI,
+	TranslationContextState,
+	TranslationContextAPIProps,
+	TranslationContextStateProps,
+	DEFAULT_LOCALE
+} from './const';
+import { LocalesLanguageEnum } from '../../i18n/locales';
 
 const TranslationProvider: React.FC<TranslationProviderProps> = (
 	{
 		children,
-		setLanguage
+		locale,
+		changeLanguage
 	}
 ) => {
 	const { formatMessage } = useIntl();
+
+	const languageUrlPrefix = useMemo(() => {
+		return locale === DEFAULT_LOCALE ? '' : `/${LocalesLanguageEnum[locale]}`;
+	}, [locale]);
 
 	const translate = useCallback((value, placeholders) => {
 		return formatMessage(
@@ -23,16 +36,26 @@ const TranslationProvider: React.FC<TranslationProviderProps> = (
 	const apiProviderValue = useMemo<TranslationContextAPIProps>(() => {
 		return {
 			translate,
-			setLanguage
+			changeLanguage
 		};
 	}, [
 		translate,
-		setLanguage
+		changeLanguage
+	]);
+
+	const stateProviderValue = useMemo<TranslationContextStateProps>(() => {
+		return {
+			languageUrlPrefix
+		};
+	}, [
+		languageUrlPrefix
 	]);
 
 	return (
 		<TranslationContextAPI.Provider value={apiProviderValue}>
-			{children}
+			<TranslationContextState.Provider value={stateProviderValue}>
+				{children}
+			</TranslationContextState.Provider>
 		</TranslationContextAPI.Provider>
 	);
 };

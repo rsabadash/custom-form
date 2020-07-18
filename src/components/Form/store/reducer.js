@@ -46,7 +46,7 @@ export const formReducer = (state, action) => {
 		case actions.UNREGISTER_FIELD:
 			const copiedStateValues = { ...state.values };
 
-			delete copiedStateValues.values[action.payload];
+			delete copiedStateValues[action.payload];
 
 			return {
 				...state,
