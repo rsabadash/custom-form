@@ -1,15 +1,16 @@
 import React from 'react';
 import Form from '../Form';
 import { Heading } from '../Heading';
+import { AccessibleFormProps } from './types';
 
-const AccessibleForm = (
+const AccessibleForm = <T, >(
 	{
 		children,
 		onSubmit,
 		formTitle,
 		initialValues,
 		ariaLabelledBy
-	}
+	}: AccessibleFormProps<T>
 ) => {
 	return (
 		<div

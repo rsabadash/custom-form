@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { App } from '../../App';
 import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useTranslationState } from '../Internationalization/const';
+import { routes } from './const';
+
+const Registration = lazy(() => import('../../modules/Registration'));
 
 const NewsFeed = () => {
 	return (
@@ -23,6 +26,11 @@ const Routes = () => {
 						<Redirect exact from="/" to={languageUrlPrefix} />
 					)
 				}
+				<Route path={`${languageUrlPrefix}${routes.signUp}`}>
+					<Suspense fallback={<div>Завантаження</div>}>
+						<Registration />
+					</Suspense>
+				</Route>
 				<Route path={`${languageUrlPrefix}/news`}>
 					<NewsFeed />
 				</Route>

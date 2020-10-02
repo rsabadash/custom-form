@@ -6,8 +6,11 @@ export default {
 		common: {
 			chooseLanguage: 'Оберіть мову',
 			open: 'Відкрити',
+			createAccount: 'Створити обліковий запис',
 			homePage: 'Головна',
-			newsPage: 'Новини'
+			newsPage: 'Новини',
+			email: 'Електронна адреса',
+			password: 'Пароль'
 		}
 	}
 };

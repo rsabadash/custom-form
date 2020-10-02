@@ -1,10 +1,10 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-
 import { LanguagesType } from '../../i18n/types';
 import { LOCALES, LocalesLanguageEnum, SUPPORTED_LANGUAGES } from '../../i18n/locales';
 import { DEFAULT_LOCALE, useTranslationAPI, useTranslationState } from '../Internationalization/const';
 import { Heading } from '../Heading';
+import { routes } from '../Routes/const';
 
 const LanguageSwitcher: React.FC = () => {
 	const { translate, changeLanguage } = useTranslationAPI();
@@ -59,6 +59,7 @@ const LanguageSwitcher: React.FC = () => {
 			}
 			<Link to={`${languageUrlPrefix}`}>{translate('common.homePage')}</Link>
 			<Link to={`${languageUrlPrefix}/news`}>{translate('common.newsPage')}</Link>
+			<Link to={`${languageUrlPrefix}${routes.signUp}`}>{translate('common.createAccount')}</Link>
 		</>
 	);
 };

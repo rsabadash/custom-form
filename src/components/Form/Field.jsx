@@ -68,6 +68,7 @@ const Field = (
 		value,
 		error,
 		component,
+		props.label,
 		getFieldHandlers
 	]);
 };

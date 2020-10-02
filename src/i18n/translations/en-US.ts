@@ -6,8 +6,11 @@ export default {
 		common: {
 			chooseLanguage: 'Choose language',
 			open: 'Open',
+			createAccount: 'Create an account',
 			homePage: 'Home',
-			newsPage: 'News'
+			newsPage: 'News',
+			email: 'Email',
+			password: 'Password'
 		}
 	}
 };
