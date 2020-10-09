@@ -1,4 +1,5 @@
 import React from 'react';
+import { Button } from '../../components/Button';
 import { Field } from '../../components/Form';
 import { Input } from '../../components/AccessibleFormField';
 import { AccessibleForm } from '../../components/AccessibleForm';
@@ -8,7 +9,6 @@ import {
 	FormFieldNames,
 	ariaLabelledByRegistrationForm
 } from './const';
-
 
 const Registration = () => {
 	const { translate } = useTranslationAPI();
@@ -33,6 +33,11 @@ const Registration = () => {
 				label={translate('common.password')}
 				component={Input}
 			/>
+			<Button
+				type="submit"
+			>
+				Submit
+			</Button>
 		</AccessibleForm>
 	);
 };

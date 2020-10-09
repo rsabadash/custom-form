@@ -24,7 +24,7 @@ const InternationalizationProvider: React.FC<InternationalizationProviderProps> 
 
 	const changeLanguage = useCallback((locale) => {
 		setLocale(locale);
-		localStorageManager.setItem(LOCAL_STORAGE_LOCALE_KEY, locale);
+		localStorageManager.setItem<string>(LOCAL_STORAGE_LOCALE_KEY, locale);
 	}, []);
 
 	const messages = useMemo(() => {

@@ -9,7 +9,7 @@ type PortalProps = {
 
 const Portal: React.FC<PortalProps> = (
 	{
-		testId,
+		testId= 'portal',
 		children,
 		portalClassName
 	}
@@ -42,10 +42,6 @@ const Portal: React.FC<PortalProps> = (
 	]);
 
 	return ReactDOM.createPortal(children, componentContainerElement);
-};
-
-Portal.defaultProps = {
-	testId: 'portal'
 };
 
 export { Portal };

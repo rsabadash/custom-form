@@ -49,6 +49,7 @@
 		"@testing-library/jest-dom": "^5.7.0",
 		"@testing-library/react": "^10.0.4",
 		"@testing-library/react-hooks": "^3.2.1",
+		"@types/axios": "^0.14.0",
 		"@types/jest": "^25.2.2",
 		"@types/jest-axe": "^3.2.2",
 		"@types/react": "^16.9.35",
@@ -90,6 +91,7 @@
 		"webpack-merge": "^4.2.2"
 	},
 	"dependencies": {
+		"axios": "^0.20.0",
 		"classnames": "^2.2.6",
 		"core-js": "^3.6.4",
 		"prop-types": "^15.7.2",

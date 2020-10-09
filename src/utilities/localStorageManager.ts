@@ -1,14 +1,14 @@
 export const localStorageManager = {
-	getItem (key: string): null | string {
+	getItem <T>(key: string): null | T {
 		const localStorageData = window.localStorage.getItem(key);
 
 		if (!localStorageData) {
 			return null;
 		}
 
-		return localStorageData;
+		return JSON.parse(localStorageData);
 	},
-	setItem (key: string, data: string): void {
-		window.localStorage.setItem(key, data);
+	setItem <T>(key: string, data: T): void {
+		window.localStorage.setItem(key, JSON.stringify(data));
 	}
 };

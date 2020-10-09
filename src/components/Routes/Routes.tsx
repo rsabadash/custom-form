@@ -5,7 +5,7 @@ import { LanguageSwitcher } from '../LanguageSwitcher';
 import { useTranslationState } from '../Internationalization/const';
 import { routes } from './const';
 
-const Registration = lazy(() => import('../../modules/Registration'));
+const SignUpPage = lazy(() => import('../../pages/SignUpPage'));
 
 const NewsFeed = () => {
 	return (
@@ -28,7 +28,7 @@ const Routes = () => {
 				}
 				<Route path={`${languageUrlPrefix}${routes.signUp}`}>
 					<Suspense fallback={<div>Завантаження</div>}>
-						<Registration />
+						<SignUpPage />
 					</Suspense>
 				</Route>
 				<Route path={`${languageUrlPrefix}/news`}>

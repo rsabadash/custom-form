@@ -38,7 +38,7 @@
 
 .accessibleFormField__checkbox + .accessibleFormField__label::after {
 	content: "";
-	border: 1px solid $fontColor;
+	border: 1px solid $mainFontColorLightTheme;
 	border-left: 0;
 	border-top: 0;
 	height: 12px;

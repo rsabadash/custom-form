@@ -5,7 +5,7 @@ type Config = {
 	errorMessage?: string;
 }
 
-export const required = (config: Config = {}) => (value: CustomAnyType): string | null => {
+export const required = (config: Config = {}) => (value: CustomPrimitiveAnyType): string | null => {
 	const { errorMessage } = config;
 
 	let message = 'Required.';

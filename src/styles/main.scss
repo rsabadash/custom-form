@@ -1,7 +1,37 @@
 @import "./variables.scss";
 
+:root {
+	--main-font-color: #{$mainFontColorLightTheme};
+	--main-font-weight: #{$mainFontWeightLightTheme};
+	--main-background-color: #{$mainBgColorLightTheme};
+}
+
+body[data-theme="dark"] {
+	--main-font-color: #{$mainFontColorDarkTheme};
+	--main-font-weight: #{$mainFontWeightDarkTheme};
+	--main-background-color: #{$mainBgColorDarkTheme};
+}
+
+body[data-theme="dark"] img {
+	filter: brightness(0.8) contrast(1.2);
+}
+
 body {
 	font-family: Arial, 'sans-serif';
-	color: $fontColor;
+	color: var(--main-font-color, $mainFontColorLightTheme);
+	background-color: var(--main-background-color, $mainBgColorLightTheme);
+	font-weight: var(--main-font-weight, $mainFontWeightLightTheme);
 	margin: 0 20px;
 }
+
+@media (prefers-color-scheme: dark) {
+	img {
+		filter: brightness(0.8) contrast(1.2);
+	}
+
+	body {
+		font-weight: 350;
+	}
+}
+
+

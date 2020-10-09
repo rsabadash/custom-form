@@ -7,10 +7,12 @@ import { Dropdown, Input } from './components/AccessibleFormField';
 import { AccessibleForm } from './components/AccessibleForm';
 import { required } from './utilities/formValidators';
 import { useTranslationAPI } from './components/Internationalization/const';
+import { useThemeSwitcher } from './hooks/useThemeSwitcher';
 
 const Section = () => {
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const { translate } = useTranslationAPI();
+	const { theme, toggleTheme } = useThemeSwitcher();
 
 	const dropdownItems = [
 		{
@@ -33,6 +35,12 @@ const Section = () => {
 
 	return (
 		<>
+			<button
+				onClick={toggleTheme}
+			>
+				{theme}
+			</button>
+			
 			<Button
 				colorType="ghost"
 				ariaHaspopup="dialog"

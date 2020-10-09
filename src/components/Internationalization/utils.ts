@@ -21,7 +21,7 @@ export const flattenMessages = (nestedMessages: NestedMessagesType, prefix = '')
 };
 
 export const defineUserLocale = (defaultLocale?: string): LanguagesType => {
-	let locale = localStorageManager.getItem(LOCAL_STORAGE_LOCALE_KEY);
+	let locale = localStorageManager.getItem<string>(LOCAL_STORAGE_LOCALE_KEY);
 
 	if (!locale) {
 		locale = (navigator.languages && navigator.languages[0]) || navigator.language;

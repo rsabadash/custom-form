@@ -1,3 +1,3 @@
 export const routes = {
-	signUp: '/signUp'
+	signUp: '/signup'
 } as const;

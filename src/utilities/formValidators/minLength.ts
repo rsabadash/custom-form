@@ -6,7 +6,7 @@ type Config = {
 	errorMessage?: string;
 }
 
-export const minLength = (config: Config) => (value: CustomAnyType): string | null | never  => {
+export const minLength = (config: Config) => (value: CustomPrimitiveAnyType): string | null | never  => {
 	const { minLength, errorMessage } = config;
 
 	if (isNullOrUndefined(minLength)) {

@@ -3,6 +3,7 @@ declare module '*.scss' {
 	export = content;
 }
 
-declare type CustomAnyType = string | number | boolean | null | undefined;
-declare type FunctionType = () => CustomAnyType | void;
-declare type UnionCustomAnyType = CustomAnyType | FunctionType;
+declare type CustomPrimitiveAnyType = string | number | boolean | null | undefined;
+declare type CustomStructureAnyType = { [key: string]: unknown } | [];
+declare type FunctionType = () => CustomPrimitiveAnyType | void;
+declare type UnionCustomAnyType = CustomPrimitiveAnyType | FunctionType;
